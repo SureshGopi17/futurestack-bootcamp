@@ -1708,7 +1708,6 @@ class AppEngine {
           <div class="form-group">
             <label for="admin-passcode">Access Passkey</label>
             <input type="password" id="admin-passcode" class="form-control" placeholder="••••••••" required>
-            <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Demo access key: <strong style="color: var(--color-cyan);">admin123</strong></span>
           </div>
 
           <button type="submit" class="btn btn-glow" style="margin-top: 1rem;">
