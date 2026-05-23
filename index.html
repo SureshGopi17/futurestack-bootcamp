@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- SEO Meta Tags -->
+  <title>FutureStack AI Bootcamp 2026 | Build Skills for the Future</title>
+  <meta name="description" content="Join the FutureStack AI Bootcamp 2026. A premier college tech event featuring hands-on workshops in AI, DS, and Web Development, a live hackathon, speaker panels, and certification. Register now!">
+  <meta name="keywords" content="FutureStack, AI Bootcamp, College Tech Event, Web Development, Hackathon, Coding, Registration">
+  
+  <!-- Favicon Simulation -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+
+  <!-- Google Fonts (Outfit & Plus Jakarta Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Chart.js for Premium Dashboard Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- QRCode.js for generating ticket and certificate check-in codes -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  
+  <!-- HTML5-QRCode Scanner for Gate Attendance Scanning -->
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+</head>
+<body class="dark-theme">
+  
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+  
+  <!-- Live Announcement Banner -->
+  <div id="announcement-banner" class="announcement-banner hidden">
+    <div class="announcement-content">
+      <span class="announcement-badge">Live</span>
+      <span id="announcement-text">Welcome to FutureStack 2026! Registrations are now open.</span>
+    </div>
+    <button class="announcement-close-btn" id="close-announcement">&times;</button>
+  </div>
+
+  <!-- Main Shell App Container -->
+  <div id="app-shell" class="app-shell">
+    
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">FutureStack<span class="highlight">'26</span></span>
+        </div>
+        <button id="sidebar-toggle-btn-mobile" class="mobile-only-btn">&times;</button>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="#home" class="nav-link active" data-target="home"><i data-lucide="home"></i> <span>Home</span></a></li>
+          <li><a href="#schedule" class="nav-link" data-target="schedule"><i data-lucide="calendar"></i> <span>Schedule</span></a></li>
+          <li><a href="#leaderboard" class="nav-link" data-target="leaderboard"><i data-lucide="trophy"></i> <span>Leaderboard</span></a></li>
+          <li><a href="#register" class="nav-link" data-target="register"><i data-lucide="user-plus"></i> <span>Register</span></a></li>
+          <li><a href="#tickets" class="nav-link" data-target="tickets"><i data-lucide="qr-code"></i> <span>My Ticket</span></a></li>
+          <li><a href="#certificates" class="nav-link" data-target="certificates"><i data-lucide="award"></i> <span>Certificates</span></a></li>
+          <li><a href="#gallery" class="nav-link" data-target="gallery"><i data-lucide="image"></i> <span>Highlights</span></a></li>
+          <li><a href="#contact" class="nav-link" data-target="contact"><i data-lucide="mail"></i> <span>Support</span></a></li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <a href="#admin" class="admin-portal-link" data-target="admin">
+          <i data-lucide="shield-check"></i>
+          <span>Admin Portal</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main View Area -->
+    <div class="main-wrapper">
+      
+      <!-- Top Mobile Header -->
+      <header class="mobile-header">
+        <button id="sidebar-open-btn" class="sidebar-open-btn"><i data-lucide="menu"></i></button>
+        <div class="mobile-logo">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">FutureStack</span>
+        </div>
+        <div class="mobile-cta-shell">
+          <a href="#register" class="btn btn-sm btn-glow">Register</a>
+        </div>
+      </header>
+
+      <!-- Dynamic View Root -->
+      <main id="main-content" class="main-content">
+        <!-- Views will be dynamically loaded here by app.js -->
+        <div class="loader-container">
+          <div class="spinner"></div>
+          <p>Booting up FutureStack Engine...</p>
+        </div>
+      </main>
+
+      <!-- Footer Section -->
+      <footer class="app-footer">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <h4>FutureStack Bootcamp 2026</h4>
+            <p>Empowering the next generation of engineers, designers, and scientists.</p>
+          </div>
+          <div class="footer-links">
+            <h5>Navigation</h5>
+            <ul>
+              <li><a href="#home">Home</a></li>
+              <li><a href="#schedule">Schedule</a></li>
+              <li><a href="#leaderboard">Leaderboard</a></li>
+              <li><a href="#register">Register Now</a></li>
+            </ul>
+          </div>
+          <div class="footer-info">
+            <h5>Event Info</h5>
+            <p>📅 May 28-30, 2026</p>
+            <p>📍 Tech Campus Auditorium</p>
+            <p>📧 support@futurestack2026.edu</p>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 FutureStack Bootcamp. Built with ⚡ for the future.</p>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
