@@ -2009,8 +2009,8 @@ body.admin-mode .main-content {
   padding: 0 !important;
 }
 
-/* Admin Dashboard Container */
-.admin-shell {
+/* Admin Dashboard Container & Variables */
+body.admin-mode {
   --ad-bg-primary: #0b0f19;
   --ad-bg-secondary: #111827;
   --ad-bg-tertiary: #1f2937;
@@ -2022,18 +2022,10 @@ body.admin-mode .main-content {
   --ad-border-radius: 12px;
   --ad-orange: #f97316;
   --ad-blue: #3b82f6;
-  
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  min-height: 100vh;
-  background-color: var(--ad-bg-primary);
-  color: var(--ad-text-primary);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  overflow: hidden;
 }
 
 /* Light Theme variables override for Admin portal */
-.admin-shell.light-theme {
+body.admin-mode.admin-light-mode {
   --ad-bg-primary: #f8fafc;
   --ad-bg-secondary: #ffffff;
   --ad-bg-tertiary: #f1f5f9;
@@ -2044,8 +2036,18 @@ body.admin-mode .main-content {
   --ad-text-muted: #64748b;
 }
 
-.admin-shell.light-theme .admin-table tr:hover td {
+body.admin-mode.admin-light-mode .admin-table tr:hover td {
   background-color: rgba(0, 0, 0, 0.02);
+}
+
+.admin-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+  background-color: var(--ad-bg-primary);
+  color: var(--ad-text-primary);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  overflow: hidden;
 }
 
 /* Admin Sidebar */

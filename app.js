@@ -1498,6 +1498,11 @@ class AppEngine {
     document.body.classList.add("admin-mode");
 
     const isLight = this.state.adminTheme === 'light';
+    if (isLight) {
+      document.body.classList.add("admin-light-mode");
+    } else {
+      document.body.classList.remove("admin-light-mode");
+    }
 
     main.innerHTML = `
       <div class="admin-shell ${isLight ? 'light-theme' : ''}">
@@ -1613,6 +1618,7 @@ class AppEngine {
       lBtn.addEventListener("click", () => {
         this.updateState("admin_auth", false);
         document.body.classList.remove("admin-mode");
+        document.body.classList.remove("admin-light-mode");
         this.showToast("Logged out of administrative session.", "info");
         this.navigateTo("admin");
       });
