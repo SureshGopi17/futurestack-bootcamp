@@ -111,7 +111,8 @@ class AppEngine {
       media: this.loadData("media", DEFAULT_MEDIA),
       events: this.loadData("events", DEFAULT_EVENTS),
       adminActiveSubPage: "dashboard",
-      adminSettings: this.loadData("admin_settings", { rbacEnabled: true, tfaEnabled: false })
+      adminSettings: this.loadData("admin_settings", { rbacEnabled: true, tfaEnabled: false }),
+      adminTheme: this.loadData("admin_theme", "dark")
     };
     
     this.router = {
@@ -1496,8 +1497,10 @@ class AppEngine {
 
     document.body.classList.add("admin-mode");
 
+    const isLight = this.state.adminTheme === 'light';
+
     main.innerHTML = `
-      <div class="admin-shell">
+      <div class="admin-shell ${isLight ? 'light-theme' : ''}">
         <!-- Sidebar -->
         <aside class="admin-sidebar" id="admin-sidebar">
           <div class="admin-sidebar-header">
@@ -1532,13 +1535,21 @@ class AppEngine {
           <div class="admin-mobile-topbar">
             <button class="admin-mobile-menu-btn" id="admin-mobile-toggle"><i data-lucide="menu"></i></button>
             <div style="font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem;">⚡ Bootcamp Admin</div>
-            <div class="admin-avatar">SA</div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <button id="admin-mobile-theme-toggle-btn" class="admin-mobile-menu-btn" style="padding: 0.25rem; display: flex; align-items: center;">
+                <i data-lucide="${isLight ? 'moon' : 'sun'}" style="width: 18px; height: 18px;"></i>
+              </button>
+              <div class="admin-avatar">SA</div>
+            </div>
           </div>
 
           <!-- Top Navigation -->
           <header class="admin-topbar">
             <h2 class="admin-topbar-title" id="admin-topbar-title-text">Dashboard Overview</h2>
             <div class="admin-topbar-actions">
+              <button id="admin-theme-toggle-btn" class="btn btn-outline btn-sm" style="padding: 0.35rem 0.5rem; display: flex; align-items: center; justify-content: center; border-color: var(--ad-glass-border); border-radius: 6px; cursor: pointer; background: transparent; color: var(--ad-text-primary);">
+                <i id="admin-theme-icon" data-lucide="${isLight ? 'moon' : 'sun'}" style="width: 16px; height: 16px;"></i>
+              </button>
               <div class="admin-profile">
                 <span style="font-size: 0.8rem; font-weight: 600; color: var(--ad-text-secondary);">Super Administrator</span>
                 <div class="admin-avatar">SA</div>
@@ -1580,6 +1591,21 @@ class AppEngine {
         if (sidebarEl) sidebarEl.classList.toggle("show");
       });
     }
+
+    // Theme Toggle Handler
+    const handleThemeToggle = () => {
+      const currentTheme = this.state.adminTheme;
+      const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+      this.updateState("adminTheme", nextTheme);
+      this.logAdminAction(`Theme switched to ${nextTheme} mode.`);
+      this.showToast(`Switched to ${nextTheme === 'light' ? 'Light' : 'Dark'} mode`, "success");
+      this.renderAdmin();
+    };
+
+    const toggleBtn = document.getElementById("admin-theme-toggle-btn");
+    const mobileToggleBtn = document.getElementById("admin-mobile-theme-toggle-btn");
+    if (toggleBtn) toggleBtn.onclick = handleThemeToggle;
+    if (mobileToggleBtn) mobileToggleBtn.onclick = handleThemeToggle;
 
     // Logout
     const lBtn = document.getElementById("admin-logout-btn");
@@ -1826,7 +1852,13 @@ class AppEngine {
     // Draw traffic chart using Chart.js
     const ctx = document.getElementById("admin-traffic-chart");
     if (ctx) {
-      new Chart(ctx, {
+      if (window.trafficChartObj) window.trafficChartObj.destroy();
+
+      const isLight = this.state.adminTheme === 'light';
+      const tickColor = isLight ? "#64748b" : "#9ca3af";
+      const gridColor = isLight ? "rgba(0, 0, 0, 0.05)" : "rgba(255, 255, 255, 0.05)";
+
+      window.trafficChartObj = new Chart(ctx, {
         type: "line",
         data: {
           labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -1834,7 +1866,7 @@ class AppEngine {
             label: "Unique Visitors",
             data: [350, 480, 520, 710, 680, 550, 790],
             borderColor: "#f97316",
-            backgroundColor: "rgba(249, 115, 22, 0.15)",
+            backgroundColor: isLight ? "rgba(249, 115, 22, 0.08)" : "rgba(249, 115, 22, 0.15)",
             borderWidth: 2,
             fill: true,
             tension: 0.4
@@ -1844,8 +1876,8 @@ class AppEngine {
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            x: { grid: { display: false }, ticks: { color: "#9ca3af" } },
-            y: { grid: { color: "rgba(255, 255, 255, 0.05)" }, ticks: { color: "#9ca3af" } }
+            x: { grid: { display: false }, ticks: { color: tickColor } },
+            y: { grid: { color: gridColor }, ticks: { color: tickColor } }
           },
           plugins: {
             legend: { display: false }
@@ -2791,8 +2823,14 @@ class AppEngine {
     const funnelCtx = document.getElementById("sales-funnel-chart");
     const growthCtx = document.getElementById("sales-growth-chart");
 
+    const isLight = this.state.adminTheme === 'light';
+    const tickColor = isLight ? "#64748b" : "#9ca3af";
+    const gridColor = isLight ? "rgba(0, 0, 0, 0.05)" : "rgba(255, 255, 255, 0.05)";
+
     if (funnelCtx) {
-      new Chart(funnelCtx, {
+      if (window.salesFunnelChartObj) window.salesFunnelChartObj.destroy();
+      
+      window.salesFunnelChartObj = new Chart(funnelCtx, {
         type: "bar",
         data: {
           labels: ["Traffic", "Registered", "Approved Pass", "Paid Enrolled"],
@@ -2810,8 +2848,8 @@ class AppEngine {
           maintainAspectRatio: false,
           indexAxis: "y",
           scales: {
-            x: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af" } },
-            y: { grid: { display: false }, ticks: { color: "#9ca3af" } }
+            x: { grid: { color: gridColor }, ticks: { color: tickColor } },
+            y: { grid: { display: false }, ticks: { color: tickColor } }
           },
           plugins: { legend: { display: false } }
         }
@@ -2819,7 +2857,9 @@ class AppEngine {
     }
 
     if (growthCtx) {
-      new Chart(growthCtx, {
+      if (window.salesGrowthChartObj) window.salesGrowthChartObj.destroy();
+
+      window.salesGrowthChartObj = new Chart(growthCtx, {
         type: "line",
         data: {
           labels: ["May 18", "May 19", "May 20", "May 21", "May 22", "May 23", "May 24"],
@@ -2827,7 +2867,7 @@ class AppEngine {
             label: "Gross Cumulative Sales ($)",
             data: [199, 498, 498, 697, 896, 1095, 1294],
             borderColor: "#3b82f6",
-            backgroundColor: "rgba(59, 130, 246, 0.1)",
+            backgroundColor: isLight ? "rgba(59, 130, 246, 0.05)" : "rgba(59, 130, 246, 0.1)",
             fill: true,
             borderWidth: 2,
             tension: 0.3
@@ -2837,8 +2877,8 @@ class AppEngine {
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            x: { grid: { display: false }, ticks: { color: "#9ca3af" } },
-            y: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af" } }
+            x: { grid: { display: false }, ticks: { color: tickColor } },
+            y: { grid: { color: gridColor }, ticks: { color: tickColor } }
           },
           plugins: { legend: { display: false } }
         }
@@ -3282,6 +3322,10 @@ class AppEngine {
     const ctx = document.getElementById("analytics-funnel-chart");
     if (!ctx) return;
 
+    const isLight = this.state.adminTheme === 'light';
+    const tickColor = isLight ? "#64748b" : "#9ca3af";
+    const gridColor = isLight ? "rgba(0, 0, 0, 0.05)" : "rgba(255, 255, 255, 0.05)";
+
     if (window.analyticsChartObj) window.analyticsChartObj.destroy();
 
     window.analyticsChartObj = new Chart(ctx, {
@@ -3301,8 +3345,8 @@ class AppEngine {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-          x: { grid: { display: false }, ticks: { color: "#9ca3af" } },
-          y: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af", precision: 0 } }
+          x: { grid: { display: false }, ticks: { color: tickColor } },
+          y: { grid: { color: gridColor }, ticks: { color: tickColor, precision: 0 } }
         },
         plugins: {
           legend: { display: false }
@@ -3880,6 +3924,12 @@ class AppEngine {
       }
     });
 
+    const isLight = this.state.adminTheme === 'light';
+    const textColor = isLight ? "#334155" : "#cbd5e1";
+    const tickColor = isLight ? "#64748b" : "#9ca3af";
+    const gridColor = isLight ? "rgba(15, 23, 42, 0.08)" : "rgba(255, 255, 255, 0.05)";
+    const borderColor = isLight ? "#ffffff" : "#111827";
+
     // Departments chart rendering
     const deptCtx = document.getElementById("departments-chart");
     if (deptCtx) {
@@ -3894,7 +3944,7 @@ class AppEngine {
             data: Object.values(depts),
             backgroundColor: ["#f97316", "#3b82f6", "#10b981", "#f59e0b", "#ec4899", "#8b5cf6"],
             borderWidth: 1.5,
-            borderColor: "#ffffff"
+            borderColor: borderColor
           }]
         },
         options: {
@@ -3903,7 +3953,7 @@ class AppEngine {
           plugins: {
             legend: {
               position: "bottom",
-              labels: { color: "#334155", font: { family: "Plus Jakarta Sans", size: 10 } }
+              labels: { color: textColor, font: { family: "Plus Jakarta Sans", size: 10 } }
             }
           }
         }
@@ -3927,7 +3977,7 @@ class AppEngine {
           datasets: [{
             label: "Developers Count",
             data: sortedSkills.map(s => s[1]),
-            backgroundColor: "rgba(59, 130, 246, 0.25)",
+            backgroundColor: isLight ? "rgba(59, 130, 246, 0.15)" : "rgba(59, 130, 246, 0.25)",
             borderColor: "#3b82f6",
             borderWidth: 2,
             borderRadius: 6
@@ -3937,8 +3987,8 @@ class AppEngine {
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            x: { grid: { display: false }, ticks: { color: "#334155" } },
-            y: { grid: { color: "rgba(15, 23, 42, 0.08)" }, ticks: { precision: 0, color: "#334155" } }
+            x: { grid: { display: false }, ticks: { color: tickColor } },
+            y: { grid: { color: gridColor }, ticks: { precision: 0, color: tickColor } }
           },
           plugins: {
             legend: { display: false }

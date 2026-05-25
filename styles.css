@@ -2032,6 +2032,22 @@ body.admin-mode .main-content {
   overflow: hidden;
 }
 
+/* Light Theme variables override for Admin portal */
+.admin-shell.light-theme {
+  --ad-bg-primary: #f8fafc;
+  --ad-bg-secondary: #ffffff;
+  --ad-bg-tertiary: #f1f5f9;
+  --ad-glass-bg: rgba(255, 255, 255, 0.75);
+  --ad-glass-border: rgba(0, 0, 0, 0.08);
+  --ad-text-primary: #0f172a;
+  --ad-text-secondary: #334155;
+  --ad-text-muted: #64748b;
+}
+
+.admin-shell.light-theme .admin-table tr:hover td {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
 /* Admin Sidebar */
 .admin-sidebar {
   background-color: var(--ad-bg-secondary);
