@@ -443,37 +443,78 @@ class AppEngine {
     const timeline = document.getElementById("schedule-timeline");
     if (!timeline) return;
 
-    const filtered = this.state.schedule.filter(item => trackFilter === "all" || item.track === trackFilter);
+    // Convert courses to timeline items
+    const courseTimelineItems = this.state.courses
+      .filter(c => c.published)
+      .map(course => {
+        let track = "hack";
+        const titleLower = (course.title || "").toLowerCase();
+        const descLower = (course.description || "").toLowerCase();
+        if (titleLower.includes("ai") || titleLower.includes("data") || titleLower.includes("intelligence") || titleLower.includes("learning") || titleLower.includes("agent") ||
+            descLower.includes("ai") || descLower.includes("data") || descLower.includes("intelligence") || descLower.includes("learning") || descLower.includes("agent")) {
+          track = "ai";
+        } else if (titleLower.includes("web") || titleLower.includes("react") || titleLower.includes("html") || titleLower.includes("css") || titleLower.includes("js") || titleLower.includes("frontend") || titleLower.includes("backend") || titleLower.includes("stack") ||
+                   descLower.includes("web") || descLower.includes("react") || descLower.includes("html") || descLower.includes("css") || descLower.includes("js") || descLower.includes("frontend") || descLower.includes("backend") || descLower.includes("stack")) {
+          track = "web";
+        }
+
+        let speaker = DEFAULT_SPEAKERS[1]; // Marcus Chen
+        if (track === "ai") {
+          speaker = DEFAULT_SPEAKERS[0]; // Dr. Samantha Vance
+        } else if (track === "web") {
+          speaker = DEFAULT_SPEAKERS[2]; // Aria Thorne
+        }
+
+        return {
+          id: course.id,
+          track: track,
+          time: `Duration: ${course.duration || "Self-Paced"}`,
+          title: course.title,
+          desc: course.description,
+          speaker: speaker,
+          isCourse: true
+        };
+      });
+
+    // Combine static schedule and dynamic course items
+    const combined = [...this.state.schedule, ...courseTimelineItems];
+
+    const filtered = combined.filter(item => trackFilter === "all" || item.track === trackFilter);
 
     if (filtered.length === 0) {
-      timeline.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 2rem;">No workshops in this track.</p>`;
+      timeline.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 2rem;">No workshops or courses in this track.</p>`;
       return;
     }
 
-    timeline.innerHTML = filtered.map(item => `
-      <div class="timeline-item">
-        <div class="timeline-dot"></div>
-        <div class="timeline-card glass-panel">
-          <div class="timeline-time-track">
-            <span>📅 ${item.id >= 200 ? "Day 2: May 29" : "Day 1: May 28"} @ ${item.time}</span>
-            <span style="text-transform: uppercase; color: var(--color-purple); font-weight: 700;">
-              ${item.track === "ai" ? "AI & Data Science" : item.track === "web" ? "Web Architecture" : "Hackathon Strategy"}
-            </span>
-          </div>
-          <h3 class="timeline-title">${item.title}</h3>
-          <p class="timeline-desc">${item.desc}</p>
-          <div class="timeline-speaker">
-            <div class="timeline-speaker-avatar">
-              <img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%232e1065%22/><text y=%2250%22 x=%2250%22 font-size=%2240%22 fill=%22%2306b6d4%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>${item.speaker.name[0]}</text></svg>">
+    timeline.innerHTML = filtered.map(item => {
+      const timeLabel = item.isCourse ? `📚 Course • ${item.time}` : `📅 ${item.id >= 200 ? "Day 2: May 29" : "Day 1: May 28"} @ ${item.time}`;
+      const trackLabel = item.track === "ai" ? "AI & Data Science" : item.track === "web" ? "Web Architecture" : "Hackathon Strategy";
+      
+      return `
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card glass-panel" style="${item.isCourse ? 'border-left: 3px solid var(--color-purple);' : ''}">
+            <div class="timeline-time-track">
+              <span>${timeLabel}</span>
+              <span style="text-transform: uppercase; color: var(--color-purple); font-weight: 700;">
+                ${trackLabel}
+              </span>
             </div>
-            <div>
-              <div class="timeline-speaker-name">${item.speaker.name}</div>
-              <div class="timeline-speaker-role">${item.speaker.role}, ${item.speaker.company}</div>
+            <h3 class="timeline-title">${item.title}</h3>
+            <p class="timeline-desc">${item.desc || ''}</p>
+            <div class="timeline-speaker">
+              <div class="timeline-speaker-avatar">
+                <img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%232e1065%22/><text y=%2250%22 x=%2250%22 font-size=%2240%22 fill=%22%2306b6d4%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>${item.speaker.name[0]}</text></svg>">
+              </div>
+              <div>
+                <div class="timeline-speaker-name">${item.speaker.name}</div>
+                <div class="timeline-speaker-role">${item.speaker.role}, ${item.speaker.company}</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    `).join("");
+      `;
+    }).join("");
   }
 
   // 3. LEADERBOARD PAGE RENDERER
@@ -1519,7 +1560,6 @@ class AppEngine {
               <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'students' ? 'active' : ''}" data-subpage="students"><i data-lucide="users"></i> <span>Students</span></a></li>
               <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'subjects' ? 'active' : ''}" data-subpage="subjects"><i data-lucide="notebook"></i> <span>Subjects</span></a></li>
               <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'teams' ? 'active' : ''}" data-subpage="teams"><i data-lucide="contact"></i> <span>Teams</span></a></li>
-              <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'sales' ? 'active' : ''}" data-subpage="sales"><i data-lucide="wallet"></i> <span>Sales</span></a></li>
               <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'blogs' ? 'active' : ''}" data-subpage="blogs"><i data-lucide="file-text"></i> <span>Blogs</span></a></li>
               <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'media' ? 'active' : ''}" data-subpage="media"><i data-lucide="image"></i> <span>Media</span></a></li>
               <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'analytics' ? 'active' : ''}" data-subpage="analytics"><i data-lucide="bar-chart-3"></i> <span>Analytics</span></a></li>
@@ -1643,7 +1683,6 @@ class AppEngine {
         students: "Student & Cohort Management",
         subjects: "Subject & Curriculum Management",
         teams: "Team & Trainer Management",
-        sales: "Sales & Revenue Reports",
         blogs: "Blog & Content Publishing",
         media: "Media & Asset Library",
         analytics: "Advanced Analytics Telemetry",
@@ -1661,7 +1700,6 @@ class AppEngine {
       students: () => this.renderAdminStudents(),
       subjects: () => this.renderAdminSubjects(),
       teams: () => this.renderAdminTeams(),
-      sales: () => this.renderAdminSales(),
       blogs: () => this.renderAdminBlogs(),
       media: () => this.renderAdminMedia(),
       analytics: () => this.renderAdminAnalytics(),
@@ -1736,7 +1774,6 @@ class AppEngine {
     
     const totalStudents = this.state.applicants.length;
     const activeCourses = this.state.courses.length;
-    const grossRevenue = this.state.sales.reduce((sum, item) => item.status === 'Success' ? sum + item.amount : sum, 0);
     const activeEvents = this.state.events.filter(e => e.status === 'Scheduled').length;
     
     const logs = this.loadData("admin_logs", [
@@ -1745,14 +1782,7 @@ class AppEngine {
     ]);
 
     root.innerHTML = `
-      <div class="admin-grid-4">
-        <div class="admin-card admin-stat-card">
-          <div class="admin-stat-icon orange"><i data-lucide="wallet"></i></div>
-          <div class="admin-stat-info">
-            <h4>$${grossRevenue}</h4>
-            <p>Gross Revenue</p>
-          </div>
-        </div>
+      <div class="admin-grid-3">
         <div class="admin-card admin-stat-card">
           <div class="admin-stat-icon blue"><i data-lucide="book-open"></i></div>
           <div class="admin-stat-info">
@@ -1916,7 +1946,6 @@ class AppEngine {
                 <th>ID</th>
                 <th>Course Title</th>
                 <th>Duration</th>
-                <th>Pricing</th>
                 <th>Status</th>
                 <th>Enrolled</th>
                 <th style="text-align: right;">Actions</th>
@@ -1949,7 +1978,7 @@ class AppEngine {
     );
 
     if (filtered.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--ad-text-muted); padding: 2rem;">No courses found matching criteria.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--ad-text-muted); padding: 2rem;">No courses found matching criteria.</td></tr>`;
       return;
     }
 
@@ -1961,7 +1990,6 @@ class AppEngine {
           <div style="font-size: 0.75rem; color: var(--ad-text-muted); max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${c.description}</div>
         </td>
         <td>${c.duration}</td>
-        <td><strong>$${c.price}</strong></td>
         <td>
           <span class="ad-badge ${c.published ? 'ad-badge-success' : 'ad-badge-pending'}" style="cursor: pointer;" onclick="window.appEngine.toggleCoursePublish('${c.id}')">
             ${c.published ? 'Published' : 'Draft'}
@@ -2023,15 +2051,9 @@ class AppEngine {
         <label for="course-description">Description</label>
         <textarea id="course-description" class="form-control" rows="3" placeholder="Core course overview..." required>${course.description}</textarea>
       </div>
-      <div class="ad-form-row">
-        <div class="ad-form-group" style="flex-grow: 1;">
-          <label for="course-duration">Duration</label>
-          <input type="text" id="course-duration" class="form-control" value="${course.duration}" placeholder="e.g. 6 Weeks">
-        </div>
-        <div class="ad-form-group" style="flex-grow: 1;">
-          <label for="course-price">Price ($ USD)</label>
-          <input type="number" id="course-price" class="form-control" value="${course.price}">
-        </div>
+      <div class="ad-form-group">
+        <label for="course-duration">Duration</label>
+        <input type="text" id="course-duration" class="form-control" value="${course.duration}" placeholder="e.g. 6 Weeks">
       </div>
       <div class="ad-form-group">
         <label for="course-syllabus">Syllabus Modules (Comma separated)</label>
@@ -2050,7 +2072,7 @@ class AppEngine {
         const title = document.getElementById("course-title").value.trim();
         const description = document.getElementById("course-description").value.trim();
         const duration = document.getElementById("course-duration").value.trim() || "6 Weeks";
-        const price = parseFloat(document.getElementById("course-price").value) || 199;
+        const price = 0;
         const syllabusText = document.getElementById("course-syllabus").value.trim();
         const published = document.getElementById("course-published").checked;
 
@@ -2688,208 +2710,6 @@ class AppEngine {
         return true;
       }
     );
-  }
-
-  renderAdminSales() {
-    const root = document.getElementById("admin-view-root");
-    if (!root) return;
-
-    const grossRevenue = this.state.sales.reduce((sum, item) => item.status === 'Success' ? sum + item.amount : sum, 0);
-    const totalTransactions = this.state.sales.length;
-    const activeCoupons = ["AI50", "WELCOME10"];
-
-    root.innerHTML = `
-      <div class="admin-grid-4">
-        <div class="admin-card admin-stat-card">
-          <div class="admin-stat-icon orange"><i data-lucide="dollar-sign"></i></div>
-          <div class="admin-stat-info">
-            <h4 id="sales-gross-rev">$${grossRevenue}</h4>
-            <p>Gross Revenue</p>
-          </div>
-        </div>
-        <div class="admin-card admin-stat-card">
-          <div class="admin-stat-icon blue"><i data-lucide="credit-card"></i></div>
-          <div class="admin-stat-info">
-            <h4>${totalTransactions}</h4>
-            <p>Transactions</p>
-          </div>
-        </div>
-        <div class="admin-card admin-stat-card">
-          <div class="admin-stat-icon emerald"><i data-lucide="trending-up"></i></div>
-          <div class="admin-stat-info">
-            <h4>$${totalTransactions > 0 ? Math.round(grossRevenue / totalTransactions) : 0}</h4>
-            <p>Average Sale</p>
-          </div>
-        </div>
-        <div class="admin-card admin-stat-card">
-          <div class="admin-stat-icon purple"><i data-lucide="percent"></i></div>
-          <div class="admin-stat-info">
-            <h4>${activeCoupons.length}</h4>
-            <p>Active Coupons</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="admin-grid-main-side">
-        <!-- Sales Table -->
-        <div class="admin-card">
-          <div class="admin-card-header">
-            <h3>Transaction Ledger</h3>
-          </div>
-          <div class="admin-table-wrap">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>TXN ID</th>
-                  <th>Student</th>
-                  <th>Course Purchased</th>
-                  <th>Amount</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th>Coupon</th>
-                  <th style="text-align: right;">Action</th>
-                </tr>
-              </thead>
-              <tbody id="admin-sales-tbody">
-                <!-- Dynamically loaded -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Sales Charts -->
-        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-          <div class="admin-card">
-            <div class="admin-card-header">
-              <h3>Acquisition Funnel</h3>
-            </div>
-            <div style="height: 180px; position: relative;">
-              <canvas id="sales-funnel-chart"></canvas>
-            </div>
-          </div>
-          <div class="admin-card">
-            <div class="admin-card-header">
-              <h3>Revenue Growth</h3>
-            </div>
-            <div style="height: 180px; position: relative;">
-              <canvas id="sales-growth-chart"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-
-    this.renderAdminSalesList();
-    this.drawSalesCharts();
-  }
-
-  renderAdminSalesList() {
-    const tbody = document.getElementById("admin-sales-tbody");
-    if (!tbody) return;
-
-    tbody.innerHTML = this.state.sales.map(s => `
-      <tr>
-        <td><strong style="color: var(--ad-blue);">${s.id}</strong></td>
-        <td>${s.studentName}</td>
-        <td><span style="font-size: 0.8rem;">${s.course}</span></td>
-        <td><strong>$${s.amount}</strong></td>
-        <td>${s.date}</td>
-        <td>
-          <span class="ad-badge ${s.status === 'Success' ? 'ad-badge-success' : s.status === 'Refunded' ? 'ad-badge-danger' : 'ad-badge-pending'}">
-            ${s.status}
-          </span>
-        </td>
-        <td><code style="color: var(--ad-orange);">${s.coupon}</code></td>
-        <td style="text-align: right;">
-          ${s.status === 'Success' ? `
-            <button class="btn btn-outline btn-sm" onclick="window.appEngine.refundSale('${s.id}')" style="font-size: 0.75rem; border-color: rgba(239, 68, 68, 0.3); color: #ef4444; padding: 0.25rem 0.5rem;">Refund</button>
-          ` : `
-            <span style="font-size: 0.75rem; color: var(--ad-text-muted);">-</span>
-          `}
-        </td>
-      </tr>
-    `).join("");
-  }
-
-  refundSale(id) {
-    if (confirm(`Process full refund for transaction ${id}? This will deduct from gross revenue totals.`)) {
-      const list = this.state.sales;
-      const idx = list.findIndex(s => s.id === id);
-      if (idx !== -1) {
-        list[idx].status = "Refunded";
-        this.updateState("sales", list);
-        this.showToast(`Transaction ${id} refunded successfully.`, "info");
-        this.logAdminAction(`Transaction ${id} refunded.`);
-        this.renderAdminSales();
-      }
-    }
-  }
-
-  drawSalesCharts() {
-    const funnelCtx = document.getElementById("sales-funnel-chart");
-    const growthCtx = document.getElementById("sales-growth-chart");
-
-    const isLight = this.state.adminTheme === 'light';
-    const tickColor = isLight ? "#64748b" : "#9ca3af";
-    const gridColor = isLight ? "rgba(0, 0, 0, 0.05)" : "rgba(255, 255, 255, 0.05)";
-
-    if (funnelCtx) {
-      if (window.salesFunnelChartObj) window.salesFunnelChartObj.destroy();
-      
-      window.salesFunnelChartObj = new Chart(funnelCtx, {
-        type: "bar",
-        data: {
-          labels: ["Traffic", "Registered", "Approved Pass", "Paid Enrolled"],
-          datasets: [{
-            label: "Acquisition Steps",
-            data: [1500, 240, 180, 85],
-            backgroundColor: ["rgba(59, 130, 246, 0.25)", "rgba(139, 92, 246, 0.25)", "rgba(245, 158, 11, 0.25)", "rgba(249, 115, 22, 0.25)"],
-            borderColor: ["#3b82f6", "#8b5cf6", "#f59e0b", "#f97316"],
-            borderWidth: 2,
-            borderRadius: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          indexAxis: "y",
-          scales: {
-            x: { grid: { color: gridColor }, ticks: { color: tickColor } },
-            y: { grid: { display: false }, ticks: { color: tickColor } }
-          },
-          plugins: { legend: { display: false } }
-        }
-      });
-    }
-
-    if (growthCtx) {
-      if (window.salesGrowthChartObj) window.salesGrowthChartObj.destroy();
-
-      window.salesGrowthChartObj = new Chart(growthCtx, {
-        type: "line",
-        data: {
-          labels: ["May 18", "May 19", "May 20", "May 21", "May 22", "May 23", "May 24"],
-          datasets: [{
-            label: "Gross Cumulative Sales ($)",
-            data: [199, 498, 498, 697, 896, 1095, 1294],
-            borderColor: "#3b82f6",
-            backgroundColor: isLight ? "rgba(59, 130, 246, 0.05)" : "rgba(59, 130, 246, 0.1)",
-            fill: true,
-            borderWidth: 2,
-            tension: 0.3
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { grid: { display: false }, ticks: { color: tickColor } },
-            y: { grid: { color: gridColor }, ticks: { color: tickColor } }
-          },
-          plugins: { legend: { display: false } }
-        }
-      });
-    }
   }
 
   renderAdminBlogs() {
