@@ -41,6 +41,50 @@ const DEFAULT_APPLICANTS = [
   { id: "AP-1008", fullName: "Ananya Panday", email: "ananya@gmail.com", phone: "+91 9678901234", collegeName: "PSG Tech", department: "EEE", yearOfStudy: 2, skills: ["Arduino", "Python"], status: "approved", checkedIn: false, ticketCode: "FS26-O5P6" }
 ];
 
+const DEFAULT_COURSES = [
+  { id: "CRS-101", title: "Advanced Generative AI & Agents", description: "Master Large Language Models, Prompt Engineering, RAG Architectures, and Autonomous AI Agent frameworks.", duration: "6 Weeks", price: 199, published: true, enrolledCount: 42, syllabus: ["Introduction to Foundation Models", "Prompt Engineering Techniques", "Vector Databases & Semantic Search", "Building Autonomous Agents"] },
+  { id: "CRS-102", title: "Full-Stack Web Development", description: "Learn modern frontend development using React, state management, backend APIs with Node.js, and database integration.", duration: "8 Weeks", price: 299, published: true, enrolledCount: 28, syllabus: ["Modern JS & React Core", "State Management & Routing", "Express APIs & Node.js Server", "NoSQL Databases & Hosting"] },
+  { id: "CRS-103", title: "Data Science & Machine Learning", description: "Statistical analysis, predictive modeling, regression, supervised and unsupervised machine learning algorithms using Python.", duration: "10 Weeks", price: 349, published: false, enrolledCount: 15, syllabus: ["Python for Data Analysis", "Exploratory Data Analysis", "Scikit-Learn Regression Models", "Deep Learning Neural Networks"] }
+];
+
+const DEFAULT_SUBJECTS = [
+  { id: "SUB-201", name: "Large Language Models Core", courseId: "CRS-101", trainer: "Dr. Samantha Vance", difficulty: "Advanced", completion: 80, materialsCount: 12 },
+  { id: "SUB-202", name: "Vector Databases & Search", courseId: "CRS-101", trainer: "Dr. Samantha Vance", difficulty: "Advanced", completion: 60, materialsCount: 8 },
+  { id: "SUB-203", name: "React Components & Hook API", courseId: "CRS-102", trainer: "Alex Rivera", difficulty: "Intermediate", completion: 90, materialsCount: 15 },
+  { id: "SUB-204", name: "Database Design & SQL/NoSQL", courseId: "CRS-102", trainer: "Marcus Chen", difficulty: "Intermediate", completion: 45, materialsCount: 10 }
+];
+
+const DEFAULT_TEAMS = [
+  { id: "TRN-301", name: "Dr. Samantha Vance", role: "Trainer", email: "samantha.vance@futurestack.edu", productivity: 95, tasksCount: 3 },
+  { id: "TRN-302", name: "Alex Rivera", role: "Mentor", email: "alex.rivera@futurestack.edu", productivity: 88, tasksCount: 5 },
+  { id: "TRN-303", name: "Marcus Chen", role: "Trainer", email: "marcus.chen@futurestack.edu", productivity: 92, tasksCount: 2 },
+  { id: "TRN-304", name: "Sarah Jenkins", role: "Sales Manager", email: "sarah.j@futurestack.edu", productivity: 84, tasksCount: 6 }
+];
+
+const DEFAULT_SALES = [
+  { id: "TXN-4001", studentName: "Aravind Swamy", course: "Advanced Generative AI & Agents", amount: 199, date: "2026-05-22", status: "Success", coupon: "AI50" },
+  { id: "TXN-4002", studentName: "Neha Sharma", course: "Full-Stack Web Development", amount: 299, date: "2026-05-23", status: "Success", coupon: "WELCOME10" },
+  { id: "TXN-4003", studentName: "Karthik Raja", course: "Advanced Generative AI & Agents", amount: 199, date: "2026-05-23", status: "Success", coupon: "NONE" },
+  { id: "TXN-4004", studentName: "Ananya Panday", course: "Data Science & Machine Learning", amount: 349, date: "2026-05-24", status: "Success", coupon: "NONE" },
+  { id: "TXN-4005", studentName: "Rohit Verma", course: "Full-Stack Web Development", amount: 299, date: "2026-05-24", status: "Pending", coupon: "NONE" }
+];
+
+const DEFAULT_BLOGS = [
+  { id: "BLG-501", title: "The Rise of Autonomous AI Agents in 2026", slug: "rise-autonomous-ai-agents-2026", excerpt: "A deep dive into how prompt-based workflows are transitioning to autonomous loop architectures.", author: "Dr. Samantha Vance", published: true, metaTitle: "AI Agents Trends 2026", metaDescription: "Discover how AI agents are transforming tech stacks in 2026 in this expert guide." },
+  { id: "BLG-502", title: "State Management in Modern Web SPAs", slug: "state-management-modern-web-spas", excerpt: "A critical review of Redux, Zustand, and light-weight local storage models for client applications.", author: "Alex Rivera", published: true, metaTitle: "State Management Review", metaDescription: "An expert comparison of modern front-end state management tools." }
+];
+
+const DEFAULT_MEDIA = [
+  { id: "MED-601", name: "hero_banner_background.jpg", size: "1.2 MB", type: "Image", url: "https://images.unsplash.com/photo-1531297484001-80022131f5a1" },
+  { id: "MED-602", name: "syllabus_guide_ai.pdf", size: "3.4 MB", type: "Document", url: "#" },
+  { id: "MED-603", name: "promotional_intro_video.mp4", size: "12.8 MB", type: "Video", url: "#" }
+];
+
+const DEFAULT_EVENTS = [
+  { id: "EVT-701", title: "Generative AI Agents Masterclass", trainer: "Dr. Samantha Vance", date: "2026-05-28", time: "10:00 AM - 1:00 PM", link: "https://meet.google.com/fs26-ai-agents", registrationsCount: 85, status: "Scheduled" },
+  { id: "EVT-702", title: "React State & Reducer Workshops", trainer: "Alex Rivera", date: "2026-05-29", time: "11:30 AM - 1:30 PM", link: "https://meet.google.com/fs26-react-state", registrationsCount: 42, status: "Scheduled" }
+];
+
 // App State Management
 class AppEngine {
   constructor() {
@@ -57,7 +101,17 @@ class AppEngine {
       registrationStep: 1,
       tempRegData: {},
       simulatedVerificationCode: null,
-      verificationAttempts: 0
+      verificationAttempts: 0,
+      
+      courses: this.loadData("courses", DEFAULT_COURSES),
+      subjects: this.loadData("subjects", DEFAULT_SUBJECTS),
+      trainers: this.loadData("trainers", DEFAULT_TEAMS),
+      sales: this.loadData("sales", DEFAULT_SALES),
+      blogs: this.loadData("blogs", DEFAULT_BLOGS),
+      media: this.loadData("media", DEFAULT_MEDIA),
+      events: this.loadData("events", DEFAULT_EVENTS),
+      adminActiveSubPage: "dashboard",
+      adminSettings: this.loadData("admin_settings", { rbacEnabled: true, tfaEnabled: false })
     };
     
     this.router = {
@@ -157,6 +211,12 @@ class AppEngine {
   handleRouting() {
     const hash = window.location.hash.replace("#", "") || "home";
     const renderer = this.router[hash];
+    
+    if (hash === "admin" && this.state.adminAuth) {
+      document.body.classList.add("admin-mode");
+    } else {
+      document.body.classList.remove("admin-mode");
+    }
     
     // Highlight correct link in sidebar
     document.querySelectorAll(".nav-link, .admin-portal-link").forEach(link => {
@@ -1429,269 +1489,2315 @@ class AppEngine {
     const main = document.getElementById("main-content");
 
     if (!this.state.adminAuth) {
+      document.body.classList.remove("admin-mode");
       this.renderAdminLogin();
       return;
     }
 
-    // Authenticated Admin Dashboard
+    document.body.classList.add("admin-mode");
+
     main.innerHTML = `
-      <div class="admin-header-row">
-        <div>
-          <h2 class="section-title">Admin Management console</h2>
-          <p class="section-subtitle">Real-time cohort telemetry, approval pipelines, scanner control, and announcements.</p>
-        </div>
-        <div>
-          <button class="btn btn-danger btn-sm" id="admin-logout-btn"><i data-lucide="log-out"></i> Logout Console</button>
-        </div>
-      </div>
+      <div class="admin-shell">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="admin-sidebar">
+          <div class="admin-sidebar-header">
+            <span class="logo-icon">⚡</span>
+            <span class="logo-text">Bootcamp Admin</span>
+          </div>
+          <div class="admin-sidebar-nav">
+            <ul>
+              <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'dashboard' ? 'active' : ''}" data-subpage="dashboard"><i data-lucide="layout-dashboard"></i> <span>Dashboard</span></a></li>
+              <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'courses' ? 'active' : ''}" data-subpage="courses"><i data-lucide="book-open"></i> <span>Courses</span></a></li>
+              <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'students' ? 'active' : ''}" data-subpage="students"><i data-lucide="users"></i> <span>Students</span></a></li>
+              <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'subjects' ? 'active' : ''}" data-subpage="subjects"><i data-lucide="notebook"></i> <span>Subjects</span></a></li>
+              <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'teams' ? 'active' : ''}" data-subpage="teams"><i data-lucide="contact"></i> <span>Teams</span></a></li>
+              <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'sales' ? 'active' : ''}" data-subpage="sales"><i data-lucide="wallet"></i> <span>Sales</span></a></li>
+              <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'blogs' ? 'active' : ''}" data-subpage="blogs"><i data-lucide="file-text"></i> <span>Blogs</span></a></li>
+              <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'media' ? 'active' : ''}" data-subpage="media"><i data-lucide="image"></i> <span>Media</span></a></li>
+              <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'analytics' ? 'active' : ''}" data-subpage="analytics"><i data-lucide="bar-chart-3"></i> <span>Analytics</span></a></li>
+              <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'events' ? 'active' : ''}" data-subpage="events"><i data-lucide="calendar"></i> <span>Events</span></a></li>
+              <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'certificates' ? 'active' : ''}" data-subpage="certificates"><i data-lucide="award"></i> <span>Certificates</span></a></li>
+              <li><a href="javascript:void(0)" class="admin-sidebar-link ${this.state.adminActiveSubPage === 'settings' ? 'active' : ''}" data-subpage="settings"><i data-lucide="settings"></i> <span>Settings</span></a></li>
+            </ul>
+          </div>
+          <div class="admin-sidebar-footer">
+            <a href="#home" class="admin-sidebar-link" style="margin-bottom: 0.5rem; color: var(--ad-text-muted);"><i data-lucide="arrow-left-right"></i> <span>Client Portal</span></a>
+            <a href="javascript:void(0)" class="admin-sidebar-link" id="admin-logout-btn" style="color: #ef4444;"><i data-lucide="log-out"></i> <span>Logout</span></a>
+          </div>
+        </aside>
 
-      <!-- Stats Cards -->
-      <div class="admin-stats-grid">
-        <div class="stat-widget glass-panel">
-          <div class="stat-widget-icon icon-purple-bg"><i data-lucide="users"></i></div>
-          <div class="stat-widget-info">
-            <h4 id="stat-total-reg">0</h4>
-            <p>Total Registered</p>
-          </div>
-        </div>
-        
-        <div class="stat-widget glass-panel">
-          <div class="stat-widget-icon icon-cyan-bg"><i data-lucide="check-circle2"></i></div>
-          <div class="stat-widget-info">
-            <h4 id="stat-approved">0</h4>
-            <p>Approved passes</p>
-          </div>
-        </div>
-        
-        <div class="stat-widget glass-panel">
-          <div class="stat-widget-icon icon-green-bg"><i data-lucide="log-in"></i></div>
-          <div class="stat-widget-info">
-            <h4 id="stat-scanned">0</h4>
-            <p>Checked-In</p>
-          </div>
-        </div>
-
-        <div class="stat-widget glass-panel">
-          <div class="stat-widget-icon icon-yellow-bg"><i data-lucide="percent"></i></div>
-          <div class="stat-widget-info">
-            <h4 id="stat-attendance-rate">0%</h4>
-            <p>Gate Checked %</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Telemetry Charts -->
-      <div class="admin-charts-grid">
-        <div class="chart-card glass-panel">
-          <h4>Cohort Skill distribution</h4>
-          <div class="chart-container-inner">
-            <canvas id="skills-chart"></canvas>
-          </div>
-        </div>
-        
-        <div class="chart-card glass-panel">
-          <h4>Department breakdown</h4>
-          <div class="chart-container-inner">
-            <canvas id="departments-chart"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- Admin Tab System -->
-      <div class="admin-tabs">
-        <button class="admin-tab-btn active" id="tab-applicants" data-tab="applicants">Applicants Manager</button>
-        <button class="admin-tab-btn" id="tab-scanner" data-tab="scanner">Gate Scanner</button>
-        <button class="admin-tab-btn" id="tab-broadcast" data-tab="broadcast">Broadcaster</button>
-      </div>
-
-      <!-- Tab Content 1: Applicants List -->
-      <div class="admin-tab-content active" id="panel-applicants">
-        <div class="applicants-controls-row">
-          <div style="display: flex; gap: 1rem; align-items: center; flex-grow: 1;">
-            <div class="search-input-wrap">
-              <i data-lucide="search"></i>
-              <input type="text" id="admin-search-applicant" class="search-input" placeholder="Search by name, college, email..." style="padding: 0.6rem 1rem 0.6rem 2.5rem; font-size: 0.85rem;">
-            </div>
-            <select class="filter-select" id="admin-filter-status" style="padding: 0.6rem 1.25rem; font-size: 0.85rem;">
-              <option value="all">All Applicants</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-              <option value="checkedin">Checked-In</option>
-            </select>
-          </div>
-          <div>
-            <button class="btn btn-secondary btn-sm" id="export-csv-btn"><i data-lucide="download"></i> Export CSV</button>
-            <button class="btn btn-glow btn-sm" id="seed-applicants-btn"><i data-lucide="refresh-cw"></i> Reset Seed Data</button>
-          </div>
-        </div>
-
-        <div class="leaderboard-table-card glass-panel">
-          <div class="app-table-wrap">
-            <table class="app-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Student Info</th>
-                  <th>College & Dept</th>
-                  <th>Passcode</th>
-                  <th>Status</th>
-                  <th>Attendance</th>
-                  <th style="width: 210px; text-align: right;">Action</th>
-                </tr>
-              </thead>
-              <tbody id="admin-applicants-table-body">
-                <!-- Loaded dynamically -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tab Content 2: QR Scanner -->
-      <div class="admin-tab-content" id="panel-scanner" style="display: none;">
-        <div class="scanner-grid">
-          <div class="scanner-video-panel glass-panel">
-            <h4 style="margin-bottom: 1rem; color: var(--color-cyan);">Dynamic Camera Scanner</h4>
-            <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-bottom: 1.5rem;">
-              Activate the webcam reader below to read and verify registrant QR passes at the campus gates.
-            </p>
-            
-            <div class="scanner-viewport">
-              <div class="scanner-overlay-line"></div>
-              <div id="camera-reader" style="width: 100%; height: 100%; object-fit: cover;"></div>
-            </div>
-            
-            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-              <button class="btn btn-outline btn-sm" id="start-camera-btn"><i data-lucide="video"></i> Start Camera</button>
-              <button class="btn btn-danger btn-sm" id="stop-camera-btn" style="display: none;"><i data-lucide="video-off"></i> Stop Camera</button>
-            </div>
+        <!-- Main Content Area -->
+        <div class="admin-dashboard-content">
+          <!-- Mobile Header -->
+          <div class="admin-mobile-topbar">
+            <button class="admin-mobile-menu-btn" id="admin-mobile-toggle"><i data-lucide="menu"></i></button>
+            <div style="font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1rem;">⚡ Bootcamp Admin</div>
+            <div class="admin-avatar">SA</div>
           </div>
 
-          <div class="scanner-manual-panel glass-panel">
-            <h4 style="margin-bottom: 1rem; color: var(--color-purple);">Simulate Gateway Check-In</h4>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
-              If camera access is restricted in the sandbox, select an active registrant from the simulated portal list to mark their check-in logs manually.
-            </p>
-
-            <form id="sim-scanner-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
-              <div class="form-group">
-                <label for="sim-select-applicant">Select Registered Student</label>
-                <select id="sim-select-applicant" class="form-control" required>
-                  <option value="" disabled selected>Select from list...</option>
-                  <!-- Populated dynamically -->
-                </select>
+          <!-- Top Navigation -->
+          <header class="admin-topbar">
+            <h2 class="admin-topbar-title" id="admin-topbar-title-text">Dashboard Overview</h2>
+            <div class="admin-topbar-actions">
+              <div class="admin-profile">
+                <span style="font-size: 0.8rem; font-weight: 600; color: var(--ad-text-secondary);">Super Administrator</span>
+                <div class="admin-avatar">SA</div>
               </div>
+            </div>
+          </header>
 
-              <div class="form-group">
-                <label for="sim-text-code">Or Type Ticket Code manually</label>
-                <input type="text" id="sim-text-code" class="form-control" placeholder="FS26-XXXX">
-              </div>
-
-              <button type="submit" class="btn btn-glow" style="margin-top: 1rem;">
-                <i data-lucide="check-square"></i> Perform Gateway Scan Check-in
-              </button>
-            </form>
+          <!-- Active View Wrapper -->
+          <div class="admin-view-container" id="admin-view-root">
+            <!-- Loaded dynamically -->
           </div>
-        </div>
-      </div>
-
-      <!-- Tab Content 3: Broadcaster Panel -->
-      <div class="admin-tab-content" id="panel-broadcast" style="display: none;">
-        <div class="broadcaster-panel glass-panel">
-          <h4 style="margin-bottom: 0.5rem;">Announcements Broadcaster</h4>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem;">Update the ticker banner shown globally in the header for all site users.</p>
-          
-          <form id="admin-broadcast-form">
-            <div class="form-group">
-              <label for="broadcast-message">Banner Message Text</label>
-              <input type="text" id="broadcast-message" class="form-control" placeholder="Type banner message here..." required>
-            </div>
-
-            <div class="checkbox-group" style="margin-top: 0.5rem;">
-              <input type="checkbox" id="broadcast-is-active" checked>
-              <label for="broadcast-is-active">Enable Broadcast Banner</label>
-            </div>
-
-            <button type="submit" class="btn btn-glow" style="align-self: flex-start; margin-top: 1rem;">
-              <i data-lucide="megaphone"></i> Broadcast Update
-            </button>
-          </form>
         </div>
       </div>
     `;
 
     lucide.createIcons();
 
-    // Attach listeners
-    document.getElementById("admin-logout-btn").addEventListener("click", () => {
-      this.updateState("admin_auth", false);
-      this.showToast("Logged out of administrative session.", "info");
-      this.navigateTo("admin");
-    });
-
-    // Tab buttons logic
-    main.querySelectorAll(".admin-tab-btn").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        const tab = e.target.getAttribute("data-tab");
-        main.querySelectorAll(".admin-tab-btn").forEach(b => b.classList.remove("active"));
-        e.target.classList.add("active");
-
-        main.querySelectorAll(".admin-tab-content").forEach(content => {
-          content.style.display = "none";
-        });
-        document.getElementById(`panel-${tab}`).style.display = "block";
+    // Attach menu links click handler
+    main.querySelectorAll(".admin-sidebar-link[data-subpage]").forEach(link => {
+      link.addEventListener("click", (e) => {
+        const subpage = e.currentTarget.getAttribute("data-subpage");
+        main.querySelectorAll(".admin-sidebar-link").forEach(b => b.classList.remove("active"));
+        e.currentTarget.classList.add("active");
         
-        // Stop camera scanner if moving away from scanner tab
-        if (tab !== "scanner") {
-          this.stopCameraScanner();
-        }
+        // Hide mobile menu if open
+        const sidebarEl = document.getElementById("admin-sidebar");
+        if (sidebarEl) sidebarEl.classList.remove("show");
+
+        this.updateState("adminActiveSubPage", subpage);
+        this.renderAdminSubPage();
       });
     });
 
-    // Setup sub module inputs
-    this.refreshAdminStats();
-    this.drawAdminCharts();
-    this.renderAdminApplicantsList();
-    this.initAdminScannerControls();
-    
-    // Broadcast Form trigger
-    const bForm = document.getElementById("admin-broadcast-form");
-    if (bForm) {
-      document.getElementById("broadcast-message").value = this.state.announcement.text;
-      document.getElementById("broadcast-is-active").checked = this.state.announcement.active;
-
-      bForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const textVal = document.getElementById("broadcast-message").value.trim();
-        const activeVal = document.getElementById("broadcast-is-active").checked;
-        
-        const annObj = { text: textVal, active: activeVal };
-        this.updateState("announcement", annObj);
-        this.refreshAnnouncement();
-        this.showToast("Global announcement ticker updated successfully!", "success");
+    // Mobile menu toggle
+    const mToggle = document.getElementById("admin-mobile-toggle");
+    if (mToggle) {
+      mToggle.addEventListener("click", () => {
+        const sidebarEl = document.getElementById("admin-sidebar");
+        if (sidebarEl) sidebarEl.classList.toggle("show");
       });
     }
 
-    // Applicant list filtering
-    const searchInput = document.getElementById("admin-search-applicant");
-    const statusSelect = document.getElementById("admin-filter-status");
+    // Logout
+    const lBtn = document.getElementById("admin-logout-btn");
+    if (lBtn) {
+      lBtn.addEventListener("click", () => {
+        this.updateState("admin_auth", false);
+        document.body.classList.remove("admin-mode");
+        this.showToast("Logged out of administrative session.", "info");
+        this.navigateTo("admin");
+      });
+    }
 
-    if (searchInput) searchInput.addEventListener("input", () => this.renderAdminApplicantsList());
-    if (statusSelect) statusSelect.addEventListener("change", () => this.renderAdminApplicantsList());
+    // Render active sub page
+    this.renderAdminSubPage();
+  }
 
-    // Export CSV click
-    document.getElementById("export-csv-btn").addEventListener("click", () => this.exportApplicantsCSV());
+  renderAdminSubPage() {
+    const root = document.getElementById("admin-view-root");
+    const titleEl = document.getElementById("admin-topbar-title-text");
+    if (!root) return;
 
-    // Seed Reset Click
-    document.getElementById("seed-applicants-btn").addEventListener("click", () => {
-      if (confirm("This will overwrite all active registrations and restore default seed data. Proceed?")) {
-        this.updateState("applicants", DEFAULT_APPLICANTS);
-        this.updateState("current_user", null);
-        this.showToast("Database seed records successfully restored.", "success");
-        this.renderAdmin();
+    const page = this.state.adminActiveSubPage;
+    
+    // Set Topbar Title
+    if (titleEl) {
+      const titles = {
+        dashboard: "Dashboard Overview",
+        courses: "Course & Syllabus Management",
+        students: "Student & Cohort Management",
+        subjects: "Subject & Curriculum Management",
+        teams: "Team & Trainer Management",
+        sales: "Sales & Revenue Reports",
+        blogs: "Blog & Content Publishing",
+        media: "Media & Asset Library",
+        analytics: "Advanced Analytics Telemetry",
+        events: "Event & Workshop Management",
+        certificates: "Certificate & Placement Module",
+        settings: "Security & Console Settings"
+      };
+      titleEl.textContent = titles[page] || "Admin Console";
+    }
+
+    // Trigger router function
+    const renderers = {
+      dashboard: () => this.renderAdminDashboard(),
+      courses: () => this.renderAdminCourses(),
+      students: () => this.renderAdminStudents(),
+      subjects: () => this.renderAdminSubjects(),
+      teams: () => this.renderAdminTeams(),
+      sales: () => this.renderAdminSales(),
+      blogs: () => this.renderAdminBlogs(),
+      media: () => this.renderAdminMedia(),
+      analytics: () => this.renderAdminAnalytics(),
+      events: () => this.renderAdminEvents(),
+      certificates: () => this.renderAdminCertificates(),
+      settings: () => this.renderAdminSettings()
+    };
+
+    if (renderers[page]) {
+      renderers[page]();
+      lucide.createIcons();
+    } else {
+      root.innerHTML = `<div style="padding: 2rem; color: red;">Error: Sub-page renderer "${page}" not found.</div>`;
+    }
+  }
+
+  showAdminModal(title, bodyHtml, onConfirm) {
+    const existing = document.getElementById("admin-modal-overlay");
+    if (existing) existing.remove();
+
+    const overlay = document.createElement("div");
+    overlay.id = "admin-modal-overlay";
+    overlay.className = "admin-modal-overlay";
+    overlay.innerHTML = `
+      <div class="admin-modal-card">
+        <div class="admin-modal-header">
+          <h3>${title}</h3>
+          <button class="admin-modal-close" id="admin-modal-close-btn">&times;</button>
+        </div>
+        <div class="admin-modal-body">
+          ${bodyHtml}
+        </div>
+        <div class="admin-modal-footer">
+          <button class="btn btn-secondary btn-sm" id="admin-modal-cancel-btn">Cancel</button>
+          <button class="btn btn-glow btn-sm" id="admin-modal-confirm-btn">Save Changes</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    const closeBtn = document.getElementById("admin-modal-close-btn");
+    const cancelBtn = document.getElementById("admin-modal-cancel-btn");
+    const confirmBtn = document.getElementById("admin-modal-confirm-btn");
+
+    const closeModal = () => overlay.remove();
+
+    if (closeBtn) closeBtn.addEventListener("click", closeModal);
+    if (cancelBtn) cancelBtn.addEventListener("click", closeModal);
+    
+    if (confirmBtn) {
+      confirmBtn.addEventListener("click", () => {
+        if (onConfirm(overlay)) {
+          closeModal();
+        }
+      });
+    }
+  }
+
+  logAdminAction(actionText) {
+    const logs = this.loadData("admin_logs", [
+      { time: new Date(Date.now() - 3600000 * 2).toISOString(), action: "Admin Session authorized." },
+      { time: new Date(Date.now() - 3600000).toISOString(), action: "Default database seeded successfully." }
+    ]);
+    logs.unshift({ time: new Date().toISOString(), action: actionText });
+    this.updateState("admin_logs", logs);
+  }
+
+  renderAdminDashboard() {
+    const root = document.getElementById("admin-view-root");
+    if (!root) return;
+    
+    const totalStudents = this.state.applicants.length;
+    const activeCourses = this.state.courses.length;
+    const grossRevenue = this.state.sales.reduce((sum, item) => item.status === 'Success' ? sum + item.amount : sum, 0);
+    const activeEvents = this.state.events.filter(e => e.status === 'Scheduled').length;
+    
+    const logs = this.loadData("admin_logs", [
+      { time: new Date(Date.now() - 3600000 * 2).toISOString(), action: "Admin Session authorized." },
+      { time: new Date(Date.now() - 3600000).toISOString(), action: "Default database seeded successfully." }
+    ]);
+
+    root.innerHTML = `
+      <div class="admin-grid-4">
+        <div class="admin-card admin-stat-card">
+          <div class="admin-stat-icon orange"><i data-lucide="wallet"></i></div>
+          <div class="admin-stat-info">
+            <h4>$${grossRevenue}</h4>
+            <p>Gross Revenue</p>
+          </div>
+        </div>
+        <div class="admin-card admin-stat-card">
+          <div class="admin-stat-icon blue"><i data-lucide="book-open"></i></div>
+          <div class="admin-stat-info">
+            <h4>${activeCourses}</h4>
+            <p>Active Courses</p>
+          </div>
+        </div>
+        <div class="admin-card admin-stat-card">
+          <div class="admin-stat-icon emerald"><i data-lucide="users"></i></div>
+          <div class="admin-stat-info">
+            <h4>${totalStudents}</h4>
+            <p>Total Students</p>
+          </div>
+        </div>
+        <div class="admin-card admin-stat-card">
+          <div class="admin-stat-icon purple"><i data-lucide="calendar"></i></div>
+          <div class="admin-stat-info">
+            <h4>${activeEvents}</h4>
+            <p>Scheduled Events</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="admin-grid-main-side">
+        <!-- Main: Traffic & Activity -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>Traffic Analytics</h3>
+            </div>
+            <div style="height: 250px; position: relative;">
+              <canvas id="admin-traffic-chart"></canvas>
+            </div>
+          </div>
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>Recent Activities Console</h3>
+            </div>
+            <div class="activity-feed">
+              ${logs.slice(0, 6).map(l => `
+                <div class="activity-item">
+                  <div class="activity-dot"></div>
+                  <div class="activity-content">
+                    <div>${l.action}</div>
+                    <span class="activity-time">${new Date(l.time).toLocaleTimeString()} - ${new Date(l.time).toLocaleDateString()}</span>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+        
+        <!-- Side: Progress & Alerts -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>Course Progress Analytics</h3>
+            </div>
+            <div class="gamification-stats">
+              ${this.state.courses.map(c => {
+                const completion = Math.round(40 + Math.random() * 40);
+                return `
+                  <div style="margin-bottom: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.25rem;">
+                      <span style="font-weight: 600; font-size: 0.75rem;">${c.title}</span>
+                      <span style="color: var(--ad-orange); font-size: 0.75rem; font-weight: 700;">${completion}%</span>
+                    </div>
+                    <div style="height: 6px; background-color: var(--ad-bg-tertiary); border-radius: 3px; overflow: hidden;">
+                      <div style="width: ${completion}%; height: 100%; background: linear-gradient(90deg, var(--ad-orange), var(--ad-blue));"></div>
+                    </div>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </div>
+          
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>System Notifications</h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+              ${this.state.applicants.filter(a => a.status === 'pending').length > 0 ? `
+                <div class="ad-badge ad-badge-pending" style="display: block; padding: 0.75rem; border-radius: 6px;">
+                  ⚠️ ${this.state.applicants.filter(a => a.status === 'pending').length} passes pending approval!
+                </div>
+              ` : `
+                <div class="ad-badge ad-badge-success" style="display: block; padding: 0.75rem; border-radius: 6px;">
+                  ✅ All applicant passes processed.
+                </div>
+              `}
+              <div class="ad-badge ad-badge-info" style="display: block; padding: 0.75rem; border-radius: 6px;">
+                📢 Broadcast ticker is currently active.
+              </div>
+              <div class="ad-badge ad-badge-purple" style="display: block; padding: 0.75rem; border-radius: 6px;">
+                🏆 Leaderboard updated with latest scores.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    // Draw traffic chart using Chart.js
+    const ctx = document.getElementById("admin-traffic-chart");
+    if (ctx) {
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          datasets: [{
+            label: "Unique Visitors",
+            data: [350, 480, 520, 710, 680, 550, 790],
+            borderColor: "#f97316",
+            backgroundColor: "rgba(249, 115, 22, 0.15)",
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { display: false }, ticks: { color: "#9ca3af" } },
+            y: { grid: { color: "rgba(255, 255, 255, 0.05)" }, ticks: { color: "#9ca3af" } }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    }
+  }
+
+  renderAdminCourses() {
+    const root = document.getElementById("admin-view-root");
+    if (!root) return;
+
+    root.innerHTML = `
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3>Course & Syllabus Inventory</h3>
+          <button class="btn btn-glow btn-sm" id="admin-add-course-btn"><i data-lucide="plus"></i> Add New Course</button>
+        </div>
+        <div class="ad-form-row">
+          <div class="ad-input-group">
+            <i data-lucide="search"></i>
+            <input type="text" id="admin-search-course" class="ad-search" placeholder="Search by title, description, or modules...">
+          </div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="courses-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Course Title</th>
+                <th>Duration</th>
+                <th>Pricing</th>
+                <th>Status</th>
+                <th>Enrolled</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-courses-tbody">
+              <!-- Loaded dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    this.renderAdminCoursesList();
+
+    document.getElementById("admin-add-course-btn").onclick = () => this.showCourseModal();
+    document.getElementById("admin-search-course").oninput = () => this.renderAdminCoursesList();
+  }
+
+  renderAdminCoursesList() {
+    const tbody = document.getElementById("admin-courses-tbody");
+    if (!tbody) return;
+
+    const query = document.getElementById("admin-search-course").value.trim().toLowerCase();
+    
+    const filtered = this.state.courses.filter(c => 
+      c.title.toLowerCase().includes(query) || 
+      c.description.toLowerCase().includes(query) ||
+      c.id.toLowerCase().includes(query)
+    );
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--ad-text-muted); padding: 2rem;">No courses found matching criteria.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(c => `
+      <tr>
+        <td><strong style="color: var(--ad-blue);">${c.id}</strong></td>
+        <td>
+          <div style="font-weight: 700; color: var(--ad-text-primary);">${c.title}</div>
+          <div style="font-size: 0.75rem; color: var(--ad-text-muted); max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${c.description}</div>
+        </td>
+        <td>${c.duration}</td>
+        <td><strong>$${c.price}</strong></td>
+        <td>
+          <span class="ad-badge ${c.published ? 'ad-badge-success' : 'ad-badge-pending'}" style="cursor: pointer;" onclick="window.appEngine.toggleCoursePublish('${c.id}')">
+            ${c.published ? 'Published' : 'Draft'}
+          </span>
+        </td>
+        <td>${c.enrolledCount} students</td>
+        <td style="text-align: right;">
+          <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+            <button class="btn btn-outline btn-sm" onclick="window.appEngine.showCourseModal('${c.id}')" style="padding: 0.35rem 0.5rem; border-color: rgba(255,255,255,0.1);"><i data-lucide="edit-3" style="width: 14px; height: 14px;"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="window.appEngine.deleteCourse('${c.id}')" style="padding: 0.35rem 0.5rem;"><i data-lucide="trash-2" style="width: 14px; height: 14px;"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
+
+    lucide.createIcons();
+  }
+
+  toggleCoursePublish(id) {
+    const list = this.state.courses;
+    const idx = list.findIndex(c => c.id === id);
+    if (idx !== -1) {
+      list[idx].published = !list[idx].published;
+      this.updateState("courses", list);
+      this.showToast(`Course status updated to ${list[idx].published ? 'Published' : 'Draft'}`, "success");
+      this.logAdminAction(`Course ${id} status toggled.`);
+      this.renderAdminCoursesList();
+    }
+  }
+
+  deleteCourse(id) {
+    if (confirm(`Are you sure you want to delete course ${id}? This cannot be undone.`)) {
+      const list = this.state.courses.filter(c => c.id !== id);
+      this.updateState("courses", list);
+      this.showToast(`Course ${id} deleted successfully.`, "info");
+      this.logAdminAction(`Course ${id} deleted.`);
+      this.renderAdminCoursesList();
+    }
+  }
+
+  showCourseModal(courseId = null) {
+    const isEdit = courseId !== null;
+    const course = isEdit ? this.state.courses.find(c => c.id === courseId) : {
+      id: "CRS-" + (100 + this.state.courses.length + 1),
+      title: "",
+      description: "",
+      duration: "6 Weeks",
+      price: 199,
+      published: true,
+      syllabus: []
+    };
+
+    const bodyHtml = `
+      <div class="ad-form-group">
+        <label for="course-title">Course Title</label>
+        <input type="text" id="course-title" class="form-control" value="${course.title}" placeholder="e.g. Prompt Engineering Advanced" required>
+      </div>
+      <div class="ad-form-group">
+        <label for="course-description">Description</label>
+        <textarea id="course-description" class="form-control" rows="3" placeholder="Core course overview..." required>${course.description}</textarea>
+      </div>
+      <div class="ad-form-row">
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="course-duration">Duration</label>
+          <input type="text" id="course-duration" class="form-control" value="${course.duration}" placeholder="e.g. 6 Weeks">
+        </div>
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="course-price">Price ($ USD)</label>
+          <input type="number" id="course-price" class="form-control" value="${course.price}">
+        </div>
+      </div>
+      <div class="ad-form-group">
+        <label for="course-syllabus">Syllabus Modules (Comma separated)</label>
+        <input type="text" id="course-syllabus" class="form-control" value="${course.syllabus.join(", ")}" placeholder="Module 1, Module 2, Module 3...">
+      </div>
+      <div class="checkbox-group" style="margin-top: 1rem;">
+        <input type="checkbox" id="course-published" ${course.published ? 'checked' : ''}>
+        <label for="course-published">Publish Immediately</label>
+      </div>
+    `;
+
+    this.showAdminModal(
+      isEdit ? `Edit Course Details (${course.id})` : "Create New Course",
+      bodyHtml,
+      (modalOverlay) => {
+        const title = document.getElementById("course-title").value.trim();
+        const description = document.getElementById("course-description").value.trim();
+        const duration = document.getElementById("course-duration").value.trim() || "6 Weeks";
+        const price = parseFloat(document.getElementById("course-price").value) || 199;
+        const syllabusText = document.getElementById("course-syllabus").value.trim();
+        const published = document.getElementById("course-published").checked;
+
+        if (!title || !description) {
+          this.showToast("Please fill in all required fields.", "warning");
+          return false;
+        }
+
+        const syllabus = syllabusText ? syllabusText.split(",").map(s => s.trim()).filter(Boolean) : [];
+
+        const list = this.state.courses;
+        if (isEdit) {
+          const idx = list.findIndex(c => c.id === courseId);
+          if (idx !== -1) {
+            list[idx] = { ...list[idx], title, description, duration, price, syllabus, published };
+            this.showToast("Course details updated successfully!", "success");
+            this.logAdminAction(`Course ${courseId} details updated.`);
+          }
+        } else {
+          list.push({
+            id: course.id,
+            title,
+            description,
+            duration,
+            price,
+            published,
+            enrolledCount: 0,
+            syllabus
+          });
+          this.showToast("New course successfully registered!", "success");
+          this.logAdminAction(`New Course ${course.id} registered.`);
+        }
+
+        this.updateState("courses", list);
+        this.renderAdminCoursesList();
+        return true;
+      }
+    );
+  }
+  renderAdminStudents() {
+    const root = document.getElementById("admin-view-root");
+    if (!root) return;
+
+    root.innerHTML = `
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3>Cohort Enrollment Manager</h3>
+          <button class="btn btn-glow btn-sm" id="admin-add-student-btn"><i data-lucide="plus"></i> Add Student Manually</button>
+        </div>
+        <div class="ad-form-row">
+          <div class="ad-input-group">
+            <i data-lucide="search"></i>
+            <input type="text" id="admin-search-student" class="ad-search" placeholder="Search by name, email, college, phone...">
+          </div>
+          <select class="ad-select" id="admin-filter-student-status">
+            <option value="all">All Applicants</option>
+            <option value="pending">Pending passes</option>
+            <option value="approved">Approved passes</option>
+            <option value="rejected">Rejected passes</option>
+            <option value="checkedin">Checked-In Gate</option>
+          </select>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="students-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Student Profile</th>
+                <th>University Details</th>
+                <th>Passcode</th>
+                <th>Status</th>
+                <th>Attendance</th>
+                <th style="text-align: right; width: 220px;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-students-tbody">
+              <!-- Loaded dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    this.renderAdminStudentsList();
+
+    document.getElementById("admin-add-student-btn").onclick = () => this.showStudentModal();
+    document.getElementById("admin-search-student").oninput = () => this.renderAdminStudentsList();
+    document.getElementById("admin-filter-student-status").onchange = () => this.renderAdminStudentsList();
+  }
+
+  renderAdminStudentsList() {
+    const tbody = document.getElementById("admin-students-tbody");
+    if (!tbody) return;
+
+    const query = document.getElementById("admin-search-student").value.trim().toLowerCase();
+    const filter = document.getElementById("admin-filter-student-status").value;
+
+    const filtered = this.state.applicants.filter(a => {
+      const matchText = a.fullName.toLowerCase().includes(query) ||
+                        a.email.toLowerCase().includes(query) ||
+                        a.collegeName.toLowerCase().includes(query) ||
+                        a.id.toLowerCase().includes(query) ||
+                        a.ticketCode.toLowerCase().includes(query);
+      
+      let matchStatus = false;
+      if (filter === "all") matchStatus = true;
+      else if (filter === "pending") matchStatus = a.status === "pending";
+      else if (filter === "approved") matchStatus = a.status === "approved";
+      else if (filter === "rejected") matchStatus = a.status === "rejected";
+      else if (filter === "checkedin") matchStatus = a.checkedIn === true;
+
+      return matchText && matchStatus;
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--ad-text-muted); padding: 2rem;">No registrants found matching filters.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(a => `
+      <tr>
+        <td><span style="font-family: monospace; font-weight: 700; color: var(--ad-text-muted);">${a.id}</span></td>
+        <td>
+          <div style="font-weight: 700; color: var(--ad-text-primary);">${a.fullName}</div>
+          <div style="font-size: 0.75rem; color: var(--ad-text-muted);">${a.email}</div>
+          <div style="font-size: 0.75rem; color: var(--ad-blue);">${a.phone}</div>
+        </td>
+        <td>
+          <div>${a.collegeName}</div>
+          <div style="font-size: 0.75rem; color: var(--ad-text-muted);">${a.department} (${a.yearOfStudy} Yr)</div>
+        </td>
+        <td><code style="color: var(--ad-orange); font-weight: 700; font-family: monospace; font-size: 0.85rem;">${a.ticketCode}</code></td>
+        <td>
+          <span class="ad-badge ${a.status === 'approved' ? 'ad-badge-success' : a.status === 'rejected' ? 'ad-badge-danger' : 'ad-badge-pending'}">
+            ${a.status}
+          </span>
+        </td>
+        <td>
+          <span class="ad-badge ${a.checkedIn ? 'ad-badge-success' : 'ad-badge-pending'}" style="cursor: pointer;" onclick="window.appEngine.toggleStudentCheckIn('${a.id}')">
+            ${a.checkedIn ? 'Checked-In' : 'Absent'}
+          </span>
+        </td>
+        <td style="text-align: right;">
+          <div style="display: flex; gap: 0.35rem; justify-content: flex-end;">
+            ${a.status === 'pending' ? `
+              <button class="btn btn-glow btn-sm" style="padding: 0.35rem 0.5rem; font-size: 0.75rem;" onclick="window.appEngine.updateStudentStatus('${a.id}', 'approved')">Approve</button>
+              <button class="btn btn-outline btn-sm" style="padding: 0.35rem 0.5rem; font-size: 0.75rem; border-color: rgba(239, 68, 68, 0.3); color: #ef4444;" onclick="window.appEngine.updateStudentStatus('${a.id}', 'rejected')">Reject</button>
+            ` : ''}
+            <button class="btn btn-outline btn-sm" onclick="window.appEngine.showStudentModal('${a.id}')" style="padding: 0.35rem 0.5rem; border-color: rgba(255,255,255,0.1);"><i data-lucide="edit-3" style="width: 14px; height: 14px;"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="window.appEngine.deleteStudent('${a.id}')" style="padding: 0.35rem 0.5rem;"><i data-lucide="trash-2" style="width: 14px; height: 14px;"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
+
+    lucide.createIcons();
+  }
+
+  updateStudentStatus(id, newStatus) {
+    const list = this.state.applicants;
+    const idx = list.findIndex(a => a.id === id);
+    if (idx !== -1) {
+      list[idx].status = newStatus;
+      this.updateState("applicants", list);
+      this.showToast(`Student pass has been ${newStatus}.`, "success");
+      this.logAdminAction(`Student ${id} status updated to ${newStatus}.`);
+      this.renderAdminStudentsList();
+    }
+  }
+
+  toggleStudentCheckIn(id) {
+    const list = this.state.applicants;
+    const idx = list.findIndex(a => a.id === id);
+    if (idx !== -1) {
+      list[idx].checkedIn = !list[idx].checkedIn;
+      list[idx].checkInTime = list[idx].checkedIn ? new Date().toISOString() : null;
+      this.updateState("applicants", list);
+      this.showToast(list[idx].checkedIn ? "Student marked Checked-In" : "Check-In status removed.", "success");
+      this.logAdminAction(`Student ${id} gate check-in status toggled.`);
+      this.renderAdminStudentsList();
+    }
+  }
+
+  deleteStudent(id) {
+    if (confirm(`Are you sure you want to delete student profile ${id}? This cannot be undone.`)) {
+      const list = this.state.applicants.filter(a => a.id !== id);
+      this.updateState("applicants", list);
+      this.showToast(`Student profile ${id} deleted successfully.`, "info");
+      this.logAdminAction(`Student ${id} profile deleted.`);
+      this.renderAdminStudentsList();
+    }
+  }
+
+  showStudentModal(studentId = null) {
+    const isEdit = studentId !== null;
+    const student = isEdit ? this.state.applicants.find(a => a.id === studentId) : {
+      id: "AP-" + (1000 + this.state.applicants.length + 1),
+      fullName: "",
+      email: "",
+      phone: "",
+      collegeName: "",
+      department: "CSE",
+      yearOfStudy: 3,
+      skills: [],
+      status: "approved",
+      checkedIn: false,
+      ticketCode: "FS26-" + Math.random().toString(36).substring(2, 6).toUpperCase()
+    };
+
+    const bodyHtml = `
+      <div class="ad-form-group">
+        <label for="student-name">Full Name</label>
+        <input type="text" id="student-name" class="form-control" value="${student.fullName}" placeholder="e.g. John Doe" required>
+      </div>
+      <div class="ad-form-row">
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="student-email">Email</label>
+          <input type="email" id="student-email" class="form-control" value="${student.email}" placeholder="e.g. john@example.com" required>
+        </div>
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="student-phone">Phone</label>
+          <input type="text" id="student-phone" class="form-control" value="${student.phone || ''}" placeholder="e.g. +91 9876543210">
+        </div>
+      </div>
+      <div class="ad-form-row">
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="student-college">College / University</label>
+          <input type="text" id="student-college" class="form-control" value="${student.collegeName}" placeholder="e.g. IIT Madras">
+        </div>
+        <div class="ad-form-group" style="width: 120px;">
+          <label for="student-year">Year</label>
+          <select id="student-year" class="form-control">
+            <option value="1" ${student.yearOfStudy == 1 ? 'selected' : ''}>1st Yr</option>
+            <option value="2" ${student.yearOfStudy == 2 ? 'selected' : ''}>2nd Yr</option>
+            <option value="3" ${student.yearOfStudy == 3 ? 'selected' : ''}>3rd Yr</option>
+            <option value="4" ${student.yearOfStudy == 4 ? 'selected' : ''}>4th Yr</option>
+          </select>
+        </div>
+      </div>
+      <div class="ad-form-row">
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="student-dept">Department</label>
+          <input type="text" id="student-dept" class="form-control" value="${student.department}" placeholder="e.g. CSE">
+        </div>
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="student-skills">Skills (Comma separated)</label>
+          <input type="text" id="student-skills" class="form-control" value="${student.skills ? student.skills.join(', ') : ''}" placeholder="e.g. Python, SQL">
+        </div>
+      </div>
+      <div class="ad-form-row" style="margin-top: 0.5rem;">
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="student-status">Pass Status</label>
+          <select id="student-status" class="form-control">
+            <option value="pending" ${student.status === 'pending' ? 'selected' : ''}>Pending</option>
+            <option value="approved" ${student.status === 'approved' ? 'selected' : ''}>Approved</option>
+            <option value="rejected" ${student.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+          </select>
+        </div>
+        <div class="checkbox-group" style="flex-grow: 1; align-self: center; margin-top: 1.25rem;">
+          <input type="checkbox" id="student-checkedin" ${student.checkedIn ? 'checked' : ''}>
+          <label for="student-checkedin">Gate Checked-in</label>
+        </div>
+      </div>
+    `;
+
+    this.showAdminModal(
+      isEdit ? `Edit Student Profile (${student.id})` : "Add Student Profile",
+      bodyHtml,
+      (modalOverlay) => {
+        const fullName = document.getElementById("student-name").value.trim();
+        const email = document.getElementById("student-email").value.trim();
+        const phone = document.getElementById("student-phone").value.trim();
+        const collegeName = document.getElementById("student-college").value.trim();
+        const yearOfStudy = parseInt(document.getElementById("student-year").value) || 3;
+        const department = document.getElementById("student-dept").value.trim() || "CSE";
+        const skillsText = document.getElementById("student-skills").value.trim();
+        const status = document.getElementById("student-status").value;
+        const checkedIn = document.getElementById("student-checkedin").checked;
+
+        if (!fullName || !email) {
+          this.showToast("Please fill in required Name and Email.", "warning");
+          return false;
+        }
+
+        const skills = skillsText ? skillsText.split(",").map(s => s.trim()).filter(Boolean) : [];
+
+        const list = this.state.applicants;
+        if (isEdit) {
+          const idx = list.findIndex(a => a.id === studentId);
+          if (idx !== -1) {
+            list[idx] = { ...list[idx], fullName, email, phone, collegeName, yearOfStudy, department, skills, status, checkedIn };
+            if (checkedIn && !list[idx].checkInTime) list[idx].checkInTime = new Date().toISOString();
+            this.showToast("Student profile updated.", "success");
+            this.logAdminAction(`Student profile ${studentId} updated.`);
+          }
+        } else {
+          list.push({
+            id: student.id,
+            fullName,
+            email,
+            phone,
+            collegeName,
+            yearOfStudy,
+            department,
+            skills,
+            status,
+            checkedIn,
+            ticketCode: student.ticketCode,
+            checkInTime: checkedIn ? new Date().toISOString() : null
+          });
+          this.showToast("New student profile created.", "success");
+          this.logAdminAction("New student profile " + student.id + " added.");
+        }
+
+        this.updateState("applicants", list);
+        this.renderAdminStudentsList();
+        return true;
+      }
+    );
+  }
+
+  renderAdminSubjects() {
+    const root = document.getElementById("admin-view-root");
+    if (!root) return;
+
+    root.innerHTML = `
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3>Subject Curriculum</h3>
+          <button class="btn btn-glow btn-sm" id="admin-add-subject-btn"><i data-lucide="plus"></i> Add Subject Module</button>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Subject Name</th>
+                <th>Linked Course</th>
+                <th>Assigned Trainer</th>
+                <th>Difficulty</th>
+                <th>Completion Progress</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-subjects-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    this.renderAdminSubjectsList();
+    document.getElementById("admin-add-subject-btn").onclick = () => this.showSubjectModal();
+  }
+
+  renderAdminSubjectsList() {
+    const tbody = document.getElementById("admin-subjects-tbody");
+    if (!tbody) return;
+
+    tbody.innerHTML = this.state.subjects.map(s => {
+      const course = this.state.courses.find(c => c.id === s.courseId);
+      const courseTitle = course ? course.title : "Unassigned";
+      
+      return `
+        <tr>
+          <td><strong style="color: var(--ad-orange);">${s.id}</strong></td>
+          <td><div style="font-weight: 700;">${s.name}</div></td>
+          <td><span style="font-size: 0.8rem; color: var(--ad-text-muted);">${courseTitle}</span></td>
+          <td>${s.trainer}</td>
+          <td>
+            <span class="ad-badge ${s.difficulty === 'Advanced' ? 'ad-badge-danger' : s.difficulty === 'Intermediate' ? 'ad-badge-purple' : 'ad-badge-success'}">
+              ${s.difficulty}
+            </span>
+          </td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem; max-width: 150px;">
+              <div style="height: 6px; background-color: var(--ad-bg-tertiary); border-radius: 3px; overflow: hidden; flex-grow: 1;">
+                <div style="width: ${s.completion}%; height: 100%; background: var(--ad-blue);"></div>
+              </div>
+              <span style="font-size: 0.75rem; font-weight: 600;">${s.completion}%</span>
+            </div>
+          </td>
+          <td style="text-align: right;">
+            <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+              <button class="btn btn-outline btn-sm" onclick="window.appEngine.showSubjectModal('${s.id}')" style="padding: 0.35rem 0.5rem; border-color: rgba(255,255,255,0.1);"><i data-lucide="edit-3" style="width: 14px; height: 14px;"></i></button>
+              <button class="btn btn-danger btn-sm" onclick="window.appEngine.deleteSubject('${s.id}')" style="padding: 0.35rem 0.5rem;"><i data-lucide="trash-2" style="width: 14px; height: 14px;"></i></button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    lucide.createIcons();
+  }
+
+  deleteSubject(id) {
+    if (confirm("Delete subject " + id + "?")) {
+      const list = this.state.subjects.filter(s => s.id !== id);
+      this.updateState("subjects", list);
+      this.showToast("Subject " + id + " removed.", "info");
+      this.logAdminAction(`Subject ${id} deleted.`);
+      this.renderAdminSubjectsList();
+    }
+  }
+
+  showSubjectModal(subId = null) {
+    const isEdit = subId !== null;
+    const subject = isEdit ? this.state.subjects.find(s => s.id === subId) : {
+      id: "SUB-" + (200 + this.state.subjects.length + 1),
+      name: "",
+      courseId: this.state.courses[0] ? this.state.courses[0].id : "",
+      trainer: this.state.trainers[0] ? this.state.trainers[0].name : "",
+      difficulty: "Intermediate",
+      completion: 0
+    };
+
+    const coursesOptions = this.state.courses.map(c => `<option value="${c.id}" ${subject.courseId === c.id ? 'selected' : ''}>${c.title}</option>`).join("");
+    const trainersOptions = this.state.trainers.map(t => `<option value="${t.name}" ${subject.trainer === t.name ? 'selected' : ''}>${t.name}</option>`).join("");
+
+    const bodyHtml = `
+      <div class="ad-form-group">
+        <label for="sub-name">Subject Name</label>
+        <input type="text" id="sub-name" class="form-control" value="${subject.name}" required>
+      </div>
+      <div class="ad-form-group">
+        <label for="sub-course">Linked Course</label>
+        <select id="sub-course" class="form-control">${coursesOptions}</select>
+      </div>
+      <div class="ad-form-group">
+        <label for="sub-trainer">Assigned Trainer</label>
+        <select id="sub-trainer" class="form-control">${trainersOptions}</select>
+      </div>
+      <div class="ad-form-row">
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="sub-diff">Difficulty Level</label>
+          <select id="sub-diff" class="form-control">
+            <option value="Beginner" ${subject.difficulty === 'Beginner' ? 'selected' : ''}>Beginner</option>
+            <option value="Intermediate" ${subject.difficulty === 'Intermediate' ? 'selected' : ''}>Intermediate</option>
+            <option value="Advanced" ${subject.difficulty === 'Advanced' ? 'selected' : ''}>Advanced</option>
+          </select>
+        </div>
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="sub-completion">Completion Progress (%)</label>
+          <input type="number" id="sub-completion" class="form-control" value="${subject.completion}" min="0" max="100">
+        </div>
+      </div>
+    `;
+
+    this.showAdminModal(
+      isEdit ? `Edit Subject (${subject.id})` : "Add Subject Module",
+      bodyHtml,
+      (overlay) => {
+        const name = document.getElementById("sub-name").value.trim();
+        const courseId = document.getElementById("sub-course").value;
+        const trainer = document.getElementById("sub-trainer").value;
+        const difficulty = document.getElementById("sub-diff").value;
+        const completion = parseInt(document.getElementById("sub-completion").value) || 0;
+
+        if (!name) {
+          this.showToast("Please enter a subject name.", "warning");
+          return false;
+        }
+
+        const list = this.state.subjects;
+        if (isEdit) {
+          const idx = list.findIndex(s => s.id === subId);
+          if (idx !== -1) {
+            list[idx] = { ...list[idx], name, courseId, trainer, difficulty, completion };
+            this.showToast("Subject details updated.", "success");
+            this.logAdminAction(`Subject ${subId} details updated.`);
+          }
+        } else {
+          list.push({ id: subject.id, name, courseId, trainer, difficulty, completion, materialsCount: 0 });
+          this.showToast("Subject module added successfully.", "success");
+          this.logAdminAction("New Subject " + subject.id + " registered.");
+        }
+
+        this.updateState("subjects", list);
+        this.renderAdminSubjectsList();
+        return true;
+      }
+    );
+  }
+
+  renderAdminTeams() {
+    const root = document.getElementById("admin-view-root");
+    if (!root) return;
+
+    root.innerHTML = `
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3>Administrative & Trainer Directory</h3>
+          <button class="btn btn-glow btn-sm" id="admin-add-team-btn"><i data-lucide="user-plus"></i> Add Team Member</button>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Trainer / Member</th>
+                <th>Email Address</th>
+                <th>Assigned Role</th>
+                <th>Productivity</th>
+                <th>Pending Tasks</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-teams-tbody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    this.renderAdminTeamsList();
+    document.getElementById("admin-add-team-btn").onclick = () => this.showTeamModal();
+  }
+
+  renderAdminTeamsList() {
+    const tbody = document.getElementById("admin-teams-tbody");
+    if (!tbody) return;
+
+    tbody.innerHTML = this.state.trainers.map(t => `
+      <tr>
+        <td><strong style="color: var(--ad-blue);">${t.id}</strong></td>
+        <td><div style="font-weight: 700;">${t.name}</div></td>
+        <td><code>${t.email}</code></td>
+        <td>
+          <span class="ad-badge ${t.role === 'Admin' || t.role === 'Super Admin' ? 'ad-badge-danger' : t.role === 'Trainer' ? 'ad-badge-success' : 'ad-badge-info'}">
+            ${t.role}
+          </span>
+        </td>
+        <td>
+          <div style="font-weight: 700; color: ${t.productivity >= 90 ? '#10b981' : '#f59e0b'};">${t.productivity}%</div>
+        </td>
+        <td>${t.tasksCount} open tasks</td>
+        <td style="text-align: right;">
+          <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+            <button class="btn btn-outline btn-sm" onclick="window.appEngine.showTeamModal('${t.id}')" style="padding: 0.35rem 0.5rem; border-color: rgba(255,255,255,0.1);"><i data-lucide="edit-3" style="width: 14px; height: 14px;"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="window.appEngine.deleteTeamMember('${t.id}')" style="padding: 0.35rem 0.5rem;"><i data-lucide="trash-2" style="width: 14px; height: 14px;"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
+
+    lucide.createIcons();
+  }
+
+  deleteTeamMember(id) {
+    if (confirm(`Remove team member ${id}?`)) {
+      const list = this.state.trainers.filter(t => t.id !== id);
+      this.updateState("trainers", list);
+      this.showToast(`Team member ${id} removed.`, "info");
+      this.logAdminAction(`Team member ${id} removed.`);
+      this.renderAdminTeamsList();
+    }
+  }
+
+  showTeamModal(memberId = null) {
+    const isEdit = memberId !== null;
+    const member = isEdit ? this.state.trainers.find(t => t.id === memberId) : {
+      id: "TRN-" + (300 + this.state.trainers.length + 1),
+      name: "",
+      email: "",
+      role: "Trainer",
+      productivity: 90,
+      tasksCount: 0
+    };
+
+    const bodyHtml = `
+      <div class="ad-form-group">
+        <label for="team-name">Full Name</label>
+        <input type="text" id="team-name" class="form-control" value="${member.name}" required>
+      </div>
+      <div class="ad-form-group">
+        <label for="team-email">Email Address</label>
+        <input type="email" id="team-email" class="form-control" value="${member.email}" required>
+      </div>
+      <div class="ad-form-group">
+        <label for="team-role">Assigned Role</label>
+        <select id="team-role" class="form-control">
+          <option value="Super Admin" ${member.role === 'Super Admin' ? 'selected' : ''}>Super Admin</option>
+          <option value="Admin" ${member.role === 'Admin' ? 'selected' : ''}>Admin</option>
+          <option value="Trainer" ${member.role === 'Trainer' ? 'selected' : ''}>Trainer</option>
+          <option value="Mentor" ${member.role === 'Mentor' ? 'selected' : ''}>Mentor</option>
+          <option value="Content Creator" ${member.role === 'Content Creator' ? 'selected' : ''}>Content Creator</option>
+          <option value="Sales Manager" ${member.role === 'Sales Manager' ? 'selected' : ''}>Sales Manager</option>
+        </select>
+      </div>
+      <div class="ad-form-row">
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="team-prod">Productivity Score (%)</label>
+          <input type="number" id="team-prod" class="form-control" value="${member.productivity}" min="0" max="100">
+        </div>
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="team-tasks">Open Tasks</label>
+          <input type="number" id="team-tasks" class="form-control" value="${member.tasksCount}" min="0">
+        </div>
+      </div>
+    `;
+
+    this.showAdminModal(
+      isEdit ? `Edit Staff Member (${member.id})` : "Add Staff Member",
+      bodyHtml,
+      (overlay) => {
+        const name = document.getElementById("team-name").value.trim();
+        const email = document.getElementById("team-email").value.trim();
+        const role = document.getElementById("team-role").value;
+        const productivity = parseInt(document.getElementById("team-prod").value) || 90;
+        const tasksCount = parseInt(document.getElementById("team-tasks").value) || 0;
+
+        if (!name || !email) {
+          this.showToast("Please fill in Name and Email.", "warning");
+          return false;
+        }
+
+        const list = this.state.trainers;
+        if (isEdit) {
+          const idx = list.findIndex(t => t.id === memberId);
+          if (idx !== -1) {
+            list[idx] = { ...list[idx], name, email, role, productivity, tasksCount };
+            this.showToast("Staff profile updated.", "success");
+            this.logAdminAction(`Staff profile ${memberId} updated.`);
+          }
+        } else {
+          list.push({ id: member.id, name, email, role, productivity, tasksCount });
+          this.showToast("Staff profile created.", "success");
+          this.logAdminAction(`New staff profile ${member.id} added.`);
+        }
+
+        this.updateState("trainers", list);
+        this.renderAdminTeamsList();
+        return true;
+      }
+    );
+  }
+
+  renderAdminSales() {
+    const root = document.getElementById("admin-view-root");
+    if (!root) return;
+
+    const grossRevenue = this.state.sales.reduce((sum, item) => item.status === 'Success' ? sum + item.amount : sum, 0);
+    const totalTransactions = this.state.sales.length;
+    const activeCoupons = ["AI50", "WELCOME10"];
+
+    root.innerHTML = `
+      <div class="admin-grid-4">
+        <div class="admin-card admin-stat-card">
+          <div class="admin-stat-icon orange"><i data-lucide="dollar-sign"></i></div>
+          <div class="admin-stat-info">
+            <h4 id="sales-gross-rev">$${grossRevenue}</h4>
+            <p>Gross Revenue</p>
+          </div>
+        </div>
+        <div class="admin-card admin-stat-card">
+          <div class="admin-stat-icon blue"><i data-lucide="credit-card"></i></div>
+          <div class="admin-stat-info">
+            <h4>${totalTransactions}</h4>
+            <p>Transactions</p>
+          </div>
+        </div>
+        <div class="admin-card admin-stat-card">
+          <div class="admin-stat-icon emerald"><i data-lucide="trending-up"></i></div>
+          <div class="admin-stat-info">
+            <h4>$${totalTransactions > 0 ? Math.round(grossRevenue / totalTransactions) : 0}</h4>
+            <p>Average Sale</p>
+          </div>
+        </div>
+        <div class="admin-card admin-stat-card">
+          <div class="admin-stat-icon purple"><i data-lucide="percent"></i></div>
+          <div class="admin-stat-info">
+            <h4>${activeCoupons.length}</h4>
+            <p>Active Coupons</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-grid-main-side">
+        <!-- Sales Table -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Transaction Ledger</h3>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>TXN ID</th>
+                  <th>Student</th>
+                  <th>Course Purchased</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Coupon</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="admin-sales-tbody">
+                <!-- Dynamically loaded -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Sales Charts -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>Acquisition Funnel</h3>
+            </div>
+            <div style="height: 180px; position: relative;">
+              <canvas id="sales-funnel-chart"></canvas>
+            </div>
+          </div>
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>Revenue Growth</h3>
+            </div>
+            <div style="height: 180px; position: relative;">
+              <canvas id="sales-growth-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    this.renderAdminSalesList();
+    this.drawSalesCharts();
+  }
+
+  renderAdminSalesList() {
+    const tbody = document.getElementById("admin-sales-tbody");
+    if (!tbody) return;
+
+    tbody.innerHTML = this.state.sales.map(s => `
+      <tr>
+        <td><strong style="color: var(--ad-blue);">${s.id}</strong></td>
+        <td>${s.studentName}</td>
+        <td><span style="font-size: 0.8rem;">${s.course}</span></td>
+        <td><strong>$${s.amount}</strong></td>
+        <td>${s.date}</td>
+        <td>
+          <span class="ad-badge ${s.status === 'Success' ? 'ad-badge-success' : s.status === 'Refunded' ? 'ad-badge-danger' : 'ad-badge-pending'}">
+            ${s.status}
+          </span>
+        </td>
+        <td><code style="color: var(--ad-orange);">${s.coupon}</code></td>
+        <td style="text-align: right;">
+          ${s.status === 'Success' ? `
+            <button class="btn btn-outline btn-sm" onclick="window.appEngine.refundSale('${s.id}')" style="font-size: 0.75rem; border-color: rgba(239, 68, 68, 0.3); color: #ef4444; padding: 0.25rem 0.5rem;">Refund</button>
+          ` : `
+            <span style="font-size: 0.75rem; color: var(--ad-text-muted);">-</span>
+          `}
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  refundSale(id) {
+    if (confirm(`Process full refund for transaction ${id}? This will deduct from gross revenue totals.`)) {
+      const list = this.state.sales;
+      const idx = list.findIndex(s => s.id === id);
+      if (idx !== -1) {
+        list[idx].status = "Refunded";
+        this.updateState("sales", list);
+        this.showToast(`Transaction ${id} refunded successfully.`, "info");
+        this.logAdminAction(`Transaction ${id} refunded.`);
+        this.renderAdminSales();
+      }
+    }
+  }
+
+  drawSalesCharts() {
+    const funnelCtx = document.getElementById("sales-funnel-chart");
+    const growthCtx = document.getElementById("sales-growth-chart");
+
+    if (funnelCtx) {
+      new Chart(funnelCtx, {
+        type: "bar",
+        data: {
+          labels: ["Traffic", "Registered", "Approved Pass", "Paid Enrolled"],
+          datasets: [{
+            label: "Acquisition Steps",
+            data: [1500, 240, 180, 85],
+            backgroundColor: ["rgba(59, 130, 246, 0.25)", "rgba(139, 92, 246, 0.25)", "rgba(245, 158, 11, 0.25)", "rgba(249, 115, 22, 0.25)"],
+            borderColor: ["#3b82f6", "#8b5cf6", "#f59e0b", "#f97316"],
+            borderWidth: 2,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: "y",
+          scales: {
+            x: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af" } },
+            y: { grid: { display: false }, ticks: { color: "#9ca3af" } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    if (growthCtx) {
+      new Chart(growthCtx, {
+        type: "line",
+        data: {
+          labels: ["May 18", "May 19", "May 20", "May 21", "May 22", "May 23", "May 24"],
+          datasets: [{
+            label: "Gross Cumulative Sales ($)",
+            data: [199, 498, 498, 697, 896, 1095, 1294],
+            borderColor: "#3b82f6",
+            backgroundColor: "rgba(59, 130, 246, 0.1)",
+            fill: true,
+            borderWidth: 2,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { display: false }, ticks: { color: "#9ca3af" } },
+            y: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af" } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+  }
+
+  renderAdminBlogs() {
+    const root = document.getElementById("admin-view-root");
+    if (!root) return;
+
+    root.innerHTML = `
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3>Blog Content Manager & SEO Console</h3>
+          <button class="btn btn-glow btn-sm" id="admin-add-blog-btn"><i data-lucide="plus"></i> Create Article Post</button>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Article Title</th>
+                <th>Author</th>
+                <th>SEO Slug</th>
+                <th>SEO Meta Info</th>
+                <th>Status</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-blogs-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    this.renderAdminBlogsList();
+    document.getElementById("admin-add-blog-btn").onclick = () => this.showBlogModal();
+  }
+
+  renderAdminBlogsList() {
+    const tbody = document.getElementById("admin-blogs-tbody");
+    if (!tbody) return;
+
+    tbody.innerHTML = this.state.blogs.map(b => `
+      <tr>
+        <td><strong style="color: var(--ad-orange);">${b.id}</strong></td>
+        <td>
+          <div style="font-weight: 700;">${b.title}</div>
+          <div style="font-size: 0.75rem; color: var(--ad-text-muted); max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${b.excerpt}</div>
+        </td>
+        <td>${b.author}</td>
+        <td><code>/${b.slug}</code></td>
+        <td>
+          <div style="font-size: 0.75rem; font-weight: 600; color: var(--ad-blue);">${b.metaTitle}</div>
+          <div style="font-size: 0.65rem; color: var(--ad-text-muted); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${b.metaDescription}</div>
+        </td>
+        <td>
+          <span class="ad-badge ${b.published ? 'ad-badge-success' : 'ad-badge-pending'}" style="cursor: pointer;" onclick="window.appEngine.toggleBlogPublish('${b.id}')">
+            ${b.published ? 'Published' : 'Draft'}
+          </span>
+        </td>
+        <td style="text-align: right;">
+          <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+            <button class="btn btn-outline btn-sm" onclick="window.appEngine.showBlogModal('${b.id}')" style="padding: 0.35rem 0.5rem; border-color: rgba(255,255,255,0.1);"><i data-lucide="edit-3" style="width: 14px; height: 14px;"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="window.appEngine.deleteBlogPost('${b.id}')" style="padding: 0.35rem 0.5rem;"><i data-lucide="trash-2" style="width: 14px; height: 14px;"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
+
+    lucide.createIcons();
+  }
+
+  toggleBlogPublish(id) {
+    const list = this.state.blogs;
+    const idx = list.findIndex(b => b.id === id);
+    if (idx !== -1) {
+      list[idx].published = !list[idx].published;
+      this.updateState("blogs", list);
+      this.showToast(`Blog status updated to ${list[idx].published ? 'Published' : 'Draft'}`, "success");
+      this.logAdminAction(`Blog ${id} publish state toggled.`);
+      this.renderAdminBlogsList();
+    }
+  }
+
+  deleteBlogPost(id) {
+    if (confirm(`Are you sure you want to delete article ${id}?`)) {
+      const list = this.state.blogs.filter(b => b.id !== id);
+      this.updateState("blogs", list);
+      this.showToast(`Article deleted successfully.`, "info");
+      this.logAdminAction(`Blog ${id} article deleted.`);
+      this.renderAdminBlogsList();
+    }
+  }
+
+  showBlogModal(blogId = null) {
+    const isEdit = blogId !== null;
+    const blog = isEdit ? this.state.blogs.find(b => b.id === blogId) : {
+      id: "BLG-" + (500 + this.state.blogs.length + 1),
+      title: "",
+      slug: "",
+      excerpt: "",
+      author: this.state.trainers[0] ? this.state.trainers[0].name : "Dr. Samantha Vance",
+      published: true,
+      metaTitle: "",
+      metaDescription: ""
+    };
+
+    const authorOptions = this.state.trainers.map(t => `<option value="${t.name}" ${blog.author === t.name ? 'selected' : ''}>${t.name}</option>`).join("");
+
+    const bodyHtml = `
+      <div class="ad-form-group">
+        <label for="blog-title">Article Title</label>
+        <input type="text" id="blog-title" class="form-control" value="${blog.title}" placeholder="e.g. Navigating React in 2026" required oninput="document.getElementById('blog-slug').value = this.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')">
+      </div>
+      <div class="ad-form-group">
+        <label for="blog-slug">URL Slug</label>
+        <input type="text" id="blog-slug" class="form-control" value="${blog.slug}" placeholder="e.g. navigating-react-2026" required>
+      </div>
+      <div class="ad-form-group">
+        <label for="blog-excerpt">Excerpt / Summary</label>
+        <textarea id="blog-excerpt" class="form-control" rows="2" placeholder="Brief summary of the article..." required>${blog.excerpt}</textarea>
+      </div>
+      <div class="ad-form-row">
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="blog-author">Author</label>
+          <select id="blog-author" class="form-control">${authorOptions}</select>
+        </div>
+        <div class="checkbox-group" style="flex-grow: 1; align-self: center; margin-top: 1.25rem;">
+          <input type="checkbox" id="blog-published" ${blog.published ? 'checked' : ''}>
+          <label for="blog-published">Publish immediately</label>
+        </div>
+      </div>
+      <div style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem;">
+        <h4 style="font-size: 0.85rem; margin-bottom: 0.75rem; color: var(--ad-blue);">SEO Metadata Optimization</h4>
+        <div class="ad-form-group">
+          <label for="blog-meta-title">Meta Title</label>
+          <input type="text" id="blog-meta-title" class="form-control" value="${blog.metaTitle}" placeholder="e.g. Guide to React State Management">
+        </div>
+        <div class="ad-form-group">
+          <label for="blog-meta-desc">Meta Description</label>
+          <input type="text" id="blog-meta-desc" class="form-control" value="${blog.metaDescription}" placeholder="Short search snippet preview...">
+        </div>
+      </div>
+    `;
+
+    this.showAdminModal(
+      isEdit ? `Edit Article Post (${blog.id})` : "Create Article Post",
+      bodyHtml,
+      (overlay) => {
+        const title = document.getElementById("blog-title").value.trim();
+        const slug = document.getElementById("blog-slug").value.trim();
+        const excerpt = document.getElementById("blog-excerpt").value.trim();
+        const author = document.getElementById("blog-author").value;
+        const published = document.getElementById("blog-published").checked;
+        const metaTitle = document.getElementById("blog-meta-title").value.trim() || title;
+        const metaDescription = document.getElementById("blog-meta-desc").value.trim() || excerpt;
+
+        if (!title || !slug || !excerpt) {
+          this.showToast("Please complete all required fields.", "warning");
+          return false;
+        }
+
+        const list = this.state.blogs;
+        if (isEdit) {
+          const idx = list.findIndex(b => b.id === blogId);
+          if (idx !== -1) {
+            list[idx] = { ...list[idx], title, slug, excerpt, author, published, metaTitle, metaDescription };
+            this.showToast("Blog article updated.", "success");
+            this.logAdminAction(`Blog article ${blogId} updated.`);
+          }
+        } else {
+          list.push({ id: blog.id, title, slug, excerpt, author, published, metaTitle, metaDescription });
+          this.showToast("New blog article published.", "success");
+          this.logAdminAction("New Blog article " + blog.id + " registered.");
+        }
+
+        this.updateState("blogs", list);
+        this.renderAdminBlogsList();
+        return true;
+      }
+    );
+  }
+
+  renderAdminMedia() {
+    const root = document.getElementById("admin-view-root");
+    if (!root) return;
+
+    root.innerHTML = `
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3>Media & Content Assets Library</h3>
+          <button class="btn btn-glow btn-sm" id="admin-upload-media-btn"><i data-lucide="upload-cloud"></i> Upload New Asset</button>
+        </div>
+        <div class="media-grid" id="admin-media-grid">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    `;
+
+    this.renderAdminMediaGrid();
+    document.getElementById("admin-upload-media-btn").onclick = () => this.showMediaModal();
+  }
+
+  renderAdminMediaGrid() {
+    const grid = document.getElementById("admin-media-grid");
+    if (!grid) return;
+
+    grid.innerHTML = this.state.media.map(m => {
+      let preview = "";
+      if (m.type === "Image") {
+        preview = `<img src="${m.url}" alt="${m.name}">`;
+      } else if (m.type === "Video") {
+        preview = `🎬`;
+      } else {
+        preview = `📄`;
+      }
+
+      return `
+        <div class="media-card">
+          <div class="media-preview-box">
+            ${preview}
+          </div>
+          <div class="media-info-box">
+            <span class="media-name" title="${m.name}">${m.name}</span>
+            <div class="media-meta">
+              <span>${m.size}</span>
+              <span class="ad-badge ad-badge-info" style="font-size: 0.55rem; padding: 0.1rem 0.25rem;">${m.type}</span>
+            </div>
+            <button class="btn btn-danger btn-sm" style="margin-top: 0.5rem; width: 100%; padding: 0.2rem;" onclick="window.appEngine.deleteMediaAsset('${m.id}')">Delete</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    lucide.createIcons();
+  }
+
+  deleteMediaAsset(id) {
+    if (confirm("Remove media asset " + id + "?")) {
+      const list = this.state.media.filter(m => m.id !== id);
+      this.updateState("media", list);
+      this.showToast("Media asset deleted.", "info");
+      this.logAdminAction(`Media asset ${id} deleted.`);
+      this.renderAdminMediaGrid();
+    }
+  }
+
+  showMediaModal() {
+    const newId = "MED-" + (600 + this.state.media.length + 1);
+
+    const bodyHtml = `
+      <div class="ad-form-group">
+        <label for="media-filename">Asset Filename</label>
+        <input type="text" id="media-filename" class="form-control" placeholder="e.g. course_intro_graphic.jpg" required>
+      </div>
+      <div class="ad-form-row">
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="media-type">Asset Type</label>
+          <select id="media-type" class="form-control">
+            <option value="Image">Image</option>
+            <option value="Video">Video</option>
+            <option value="Document">Document</option>
+          </select>
+        </div>
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="media-size">File Size</label>
+          <input type="text" id="media-size" class="form-control" placeholder="e.g. 1.8 MB" required>
+        </div>
+      </div>
+      <div class="ad-form-group" id="media-url-group">
+        <label for="media-url">Image URL Placeholder (Optional)</label>
+        <input type="text" id="media-url" class="form-control" value="https://images.unsplash.com/photo-1516321318423-f06f85e504b3" required>
+      </div>
+    `;
+
+    this.showAdminModal(
+      "Upload Media Asset",
+      bodyHtml,
+      (overlay) => {
+        const name = document.getElementById("media-filename").value.trim();
+        const type = document.getElementById("media-type").value;
+        const size = document.getElementById("media-size").value.trim() || "1.0 MB";
+        const url = document.getElementById("media-url").value.trim() || "#";
+
+        if (!name) {
+          this.showToast("Please enter a filename.", "warning");
+          return false;
+        }
+
+        const list = this.state.media;
+        list.push({ id: newId, name, type, size, url });
+        this.updateState("media", list);
+        this.showToast("Media asset added successfully.", "success");
+        this.logAdminAction(`Media asset ${newId} uploaded.`);
+      }
+    );
+  }
+
+  renderAdminAnalytics() {
+    const root = document.getElementById("admin-view-root");
+    if (!root) return;
+
+    // Calculate metrics
+    const total = this.state.applicants.length;
+    const checkedIn = this.state.applicants.filter(a => a.checkedIn).length;
+    const approved = this.state.applicants.filter(a => a.status === 'approved').length;
+    const pending = this.state.applicants.filter(a => a.status === 'pending').length;
+
+    root.innerHTML = `
+      <div class="admin-grid-4">
+        <div class="admin-card admin-stat-card">
+          <div class="admin-stat-icon orange"><i data-lucide="bar-chart-2"></i></div>
+          <div class="admin-stat-info">
+            <h4>${total > 0 ? Math.round((checkedIn / total) * 100) : 0}%</h4>
+            <p>Conversion Rate</p>
+          </div>
+        </div>
+        <div class="admin-card admin-stat-card">
+          <div class="admin-stat-icon blue"><i data-lucide="activity"></i></div>
+          <div class="admin-stat-info">
+            <h4>${checkedIn}</h4>
+            <p>Checked-In Cohort</p>
+          </div>
+        </div>
+        <div class="admin-card admin-stat-card">
+          <div class="admin-stat-icon emerald"><i data-lucide="award"></i></div>
+          <div class="admin-stat-info">
+            <h4>84.5%</h4>
+            <p>Avg Quiz Score</p>
+          </div>
+        </div>
+        <div class="admin-card admin-stat-card">
+          <div class="admin-stat-icon purple"><i data-lucide="clock"></i></div>
+          <div class="admin-stat-info">
+            <h4>42m</h4>
+            <p>Session Duration</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-grid-main-side">
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Student Acquisition Funnel</h3>
+          </div>
+          <div style="height: 280px; position: relative;">
+            <canvas id="analytics-funnel-chart"></canvas>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Retention Ticker</h3>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Interval</th>
+                  <th style="text-align: right;">Retention %</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Week 1 (Onboarding)</td>
+                  <td style="text-align: right; font-weight: 700; color: var(--color-green);">100%</td>
+                </tr>
+                <tr>
+                  <td>Week 2 (Core Lectures)</td>
+                  <td style="text-align: right; font-weight: 700; color: var(--color-green);">94.8%</td>
+                </tr>
+                <tr>
+                  <td>Week 3 (Assignments)</td>
+                  <td style="text-align: right; font-weight: 700; color: var(--color-cyan);">88.2%</td>
+                </tr>
+                <tr>
+                  <td>Week 4 (Hackathon Prep)</td>
+                  <td style="text-align: right; font-weight: 700; color: var(--ad-orange);">81.5%</td>
+                </tr>
+                <tr>
+                  <td>Week 5 (Live Hackathon)</td>
+                  <td style="text-align: right; font-weight: 700; color: var(--ad-orange);">78.0%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-card" style="margin-top: 1.5rem;">
+        <div class="admin-card-header">
+          <h3>Integrations & Tracking Tags</h3>
+        </div>
+        <form id="analytics-integrations-form" style="display: flex; flex-direction: column; gap: 1rem;">
+          <div class="ad-form-row">
+            <div class="ad-form-group" style="flex-grow: 1;">
+              <label for="ga-tag-id">Google Analytics Measurement ID</label>
+              <input type="text" id="ga-tag-id" class="form-control" value="${this.loadData('ga_tag_id', 'G-FS2026BOOTCAMP')}" placeholder="e.g. G-XXXXXXX">
+            </div>
+            <div class="ad-form-group" style="flex-grow: 1;">
+              <label for="hotjar-id">Hotjar Tracking ID</label>
+              <input type="text" id="hotjar-id" class="form-control" value="${this.loadData('hotjar_id', 'HJ-890123')}" placeholder="e.g. 1234567">
+            </div>
+            <div class="ad-form-group" style="flex-grow: 1;">
+              <label for="fb-pixel-id">Facebook Pixel ID</label>
+              <input type="text" id="fb-pixel-id" class="form-control" value="${this.loadData('fb_pixel_id', 'FB-562910')}" placeholder="e.g. 987654321">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-glow btn-sm" style="align-self: flex-start;">Save Tracking Tags</button>
+        </form>
+      </div>
+    `;
+
+    // Draw charts
+    this.drawAnalyticsCharts(total, approved, checkedIn);
+
+    // Save Integrations handler
+    const form = document.getElementById("analytics-integrations-form");
+    if (form) {
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        const ga = document.getElementById("ga-tag-id").value.trim();
+        const hj = document.getElementById("hotjar-id").value.trim();
+        const fb = document.getElementById("fb-pixel-id").value.trim();
+
+        localStorage.setItem("ga_tag_id", ga);
+        localStorage.setItem("hotjar_id", hj);
+        localStorage.setItem("fb_pixel_id", fb);
+
+        this.showToast("Tracking and analytics integrations updated successfully.", "success");
+        this.logAdminAction("Telemetry integrations config modified.");
+      };
+    }
+  }
+
+  drawAnalyticsCharts(total, approved, checkedIn) {
+    const ctx = document.getElementById("analytics-funnel-chart");
+    if (!ctx) return;
+
+    if (window.analyticsChartObj) window.analyticsChartObj.destroy();
+
+    window.analyticsChartObj = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Total Registered", "Approved Passes", "Checked-in Attendees"],
+        datasets: [{
+          label: "Conversion Funnel",
+          data: [total, approved, checkedIn],
+          backgroundColor: ["rgba(59, 130, 246, 0.4)", "rgba(139, 92, 246, 0.4)", "rgba(249, 115, 22, 0.4)"],
+          borderColor: ["#3b82f6", "#8b5cf6", "#f97316"],
+          borderWidth: 2,
+          borderRadius: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { grid: { display: false }, ticks: { color: "#9ca3af" } },
+          y: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#9ca3af", precision: 0 } }
+        },
+        plugins: {
+          legend: { display: false }
+        }
       }
     });
+  }
+
+  renderAdminEvents() {
+    const root = document.getElementById("admin-view-root");
+    if (!root) return;
+
+    root.innerHTML = `
+      <div class="admin-grid-main-side">
+        <!-- Event List Column -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Workshops & Event Schedule</h3>
+            <button class="btn btn-glow btn-sm" id="admin-add-event-btn"><i data-lucide="plus"></i> Add Event</button>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Workshop Title</th>
+                  <th>Trainer</th>
+                  <th>Date & Time</th>
+                  <th>Registrations</th>
+                  <th>Status</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-events-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Attendance Scanner Console -->
+        <div class="admin-card" style="align-self: flex-start;">
+          <div class="admin-card-header">
+            <h3>Gateway Attendance Scanner</h3>
+          </div>
+          
+          <div id="camera-reader" style="width: 100%; min-height: 180px; background: #000; border-radius: 8px; overflow: hidden; position: relative; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; border: 1px solid var(--ad-glass-border);">
+            <span style="font-size: 0.8rem; color: var(--ad-text-muted); text-align: center; padding: 1rem;">📷 Camera Scanner Stream Off</span>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+            <button class="btn btn-glow btn-sm" id="start-camera-btn" style="flex: 1;"><i data-lucide="camera"></i> Start Camera</button>
+            <button class="btn btn-danger btn-sm" id="stop-camera-btn" style="flex: 1; display: none;"><i data-lucide="camera-off"></i> Stop Camera</button>
+          </div>
+
+          <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem;">
+            <h4 style="font-size: 0.85rem; color: var(--ad-blue); margin-bottom: 0.75rem;">Simulate QR Pass Scan</h4>
+            <form id="sim-scanner-form" style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <div class="ad-form-group">
+                <label for="sim-select-applicant">Select Approved Candidate</label>
+                <select id="sim-select-applicant" class="form-control" style="background-color: var(--ad-bg-tertiary);">
+                  <!-- Dynamically populated -->
+                </select>
+              </div>
+              <div style="text-align: center; font-size: 0.75rem; color: var(--ad-text-muted); margin: -0.25rem 0;">- OR ENTER MANUAL PASS CODE -</div>
+              <div class="ad-form-group">
+                <label for="sim-text-code">Manual Ticket Code</label>
+                <input type="text" id="sim-text-code" class="form-control" placeholder="e.g. FS26-A1B2">
+              </div>
+              <button type="submit" class="btn btn-glow btn-sm" style="width: 100%;">Process Check-In</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    `;
+
+    this.renderAdminEventsList();
+    this.initAdminScannerControls();
+
+    document.getElementById("admin-add-event-btn").onclick = () => this.showEventModal();
+  }
+
+  renderAdminEventsList() {
+    const tbody = document.getElementById("admin-events-tbody");
+    if (!tbody) return;
+
+    tbody.innerHTML = this.state.events.map(e => `
+      <tr>
+        <td><strong style="color: var(--ad-orange);">${e.id}</strong></td>
+        <td>
+          <div style="font-weight: 700;">${e.title}</div>
+          <div style="font-size: 0.75rem; color: var(--ad-blue); max-width: 250px; overflow: hidden; text-overflow: ellipsis;"><a href="${e.link}" target="_blank" style="color: inherit; text-decoration: underline;">${e.link}</a></div>
+        </td>
+        <td>${e.trainer}</td>
+        <td>
+          <div>${e.date}</div>
+          <div style="font-size: 0.75rem; color: var(--ad-text-muted);">${e.time}</div>
+        </td>
+        <td><span style="font-weight: 700;">${e.registrationsCount}</span> registered</td>
+        <td>
+          <span class="ad-badge ${e.status === 'Scheduled' ? 'ad-badge-info' : e.status === 'Completed' ? 'ad-badge-success' : 'ad-badge-danger'}">
+            ${e.status}
+          </span>
+        </td>
+        <td style="text-align: right;">
+          <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+            <button class="btn btn-outline btn-sm" onclick="window.appEngine.showEventModal('${e.id}')" style="padding: 0.35rem 0.5rem; border-color: rgba(255,255,255,0.1);"><i data-lucide="edit-3" style="width: 14px; height: 14px;"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="window.appEngine.deleteEvent('${e.id}')" style="padding: 0.35rem 0.5rem;"><i data-lucide="trash-2" style="width: 14px; height: 14px;"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
+
+    lucide.createIcons();
+  }
+
+  deleteEvent(id) {
+    if (confirm(`Cancel and delete event ${id}?`)) {
+      const list = this.state.events.filter(e => e.id !== id);
+      this.updateState("events", list);
+      this.showToast("Event cancelled and removed from registry.", "info");
+      this.logAdminAction(`Event ${id} removed.`);
+      this.renderAdminEventsList();
+    }
+  }
+
+  showEventModal(eventId = null) {
+    const isEdit = eventId !== null;
+    const event = isEdit ? this.state.events.find(e => e.id === eventId) : {
+      id: "EVT-" + (700 + this.state.events.length + 1),
+      title: "",
+      trainer: this.state.trainers[0] ? this.state.trainers[0].name : "Dr. Samantha Vance",
+      date: new Date().toISOString().split('T')[0],
+      time: "10:00 AM - 12:00 PM",
+      link: "https://meet.google.com/fs26-xxx-xxx",
+      registrationsCount: 0,
+      status: "Scheduled"
+    };
+
+    const trainerOptions = this.state.trainers.map(t => `<option value="${t.name}" ${event.trainer === t.name ? 'selected' : ''}>${t.name}</option>`).join("");
+
+    const bodyHtml = `
+      <div class="ad-form-group">
+        <label for="event-title">Event Title</label>
+        <input type="text" id="event-title" class="form-control" value="${event.title}" placeholder="e.g. LLM Fine-Tuning" required>
+      </div>
+      <div class="ad-form-group">
+        <label for="event-trainer">Assigned Trainer / Host</label>
+        <select id="event-trainer" class="form-control">${trainerOptions}</select>
+      </div>
+      <div class="ad-form-row">
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="event-date">Scheduled Date</label>
+          <input type="date" id="event-date" class="form-control" value="${event.date}" required>
+        </div>
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="event-time">Time slot</label>
+          <input type="text" id="event-time" class="form-control" value="${event.time}" placeholder="e.g. 10:00 AM - 12:00 PM" required>
+        </div>
+      </div>
+      <div class="ad-form-group">
+        <label for="event-link">Google Meet Link</label>
+        <div style="display: flex; gap: 0.5rem;">
+          <input type="text" id="event-link" class="form-control" value="${event.link}" placeholder="https://meet.google.com/..." required style="flex-grow: 1;">
+          <button type="button" class="btn btn-outline" onclick="document.getElementById('event-link').value = 'https://meet.google.com/fs26-' + Math.random().toString(36).substring(2, 6) + '-' + Math.random().toString(36).substring(2, 5)" style="white-space: nowrap;">Auto-Gen Link</button>
+        </div>
+      </div>
+      <div class="ad-form-row">
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="event-registrations">Initial Registrants</label>
+          <input type="number" id="event-registrations" class="form-control" value="${event.registrationsCount}" min="0">
+        </div>
+        <div class="ad-form-group" style="flex-grow: 1;">
+          <label for="event-status">Status</label>
+          <select id="event-status" class="form-control">
+            <option value="Scheduled" ${event.status === 'Scheduled' ? 'selected' : ''}>Scheduled</option>
+            <option value="Completed" ${event.status === 'Completed' ? 'selected' : ''}>Completed</option>
+            <option value="Cancelled" ${event.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+          </select>
+        </div>
+      </div>
+    `;
+
+    this.showAdminModal(
+      isEdit ? `Edit Event Details (${event.id})` : "Schedule New Workshop",
+      bodyHtml,
+      (overlay) => {
+        const title = document.getElementById("event-title").value.trim();
+        const trainer = document.getElementById("event-trainer").value;
+        const date = document.getElementById("event-date").value;
+        const time = document.getElementById("event-time").value.trim();
+        const link = document.getElementById("event-link").value.trim();
+        const registrationsCount = parseInt(document.getElementById("event-registrations").value) || 0;
+        const status = document.getElementById("event-status").value;
+
+        if (!title || !date || !time || !link) {
+          this.showToast("Please fill all required information.", "warning");
+          return false;
+        }
+
+        const list = this.state.events;
+        if (isEdit) {
+          const idx = list.findIndex(e => e.id === eventId);
+          if (idx !== -1) {
+            list[idx] = { ...list[idx], title, trainer, date, time, link, registrationsCount, status };
+            this.showToast("Event updated successfully.", "success");
+            this.logAdminAction(`Event ${eventId} updated.`);
+          }
+        } else {
+          list.push({ id: event.id, title, trainer, date, time, link, registrationsCount, status });
+          this.showToast("New event scheduled successfully.", "success");
+          this.logAdminAction(`New event ${event.id} registered.`);
+        }
+
+        this.updateState("events", list);
+        this.renderAdminEventsList();
+        return true;
+      }
+    );
+  }
+
+  renderAdminCertificates() {
+    const root = document.getElementById("admin-view-root");
+    if (!root) return;
+
+    const list = this.state.applicants;
+    const checkedInCandidates = list.filter(a => a.checkedIn);
+
+    root.innerHTML = `
+      <div class="admin-grid-main-side">
+        <!-- Certificate Issuance Queue -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Gateway Certificate Release Queue</h3>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Student ID</th>
+                  <th>Full Name</th>
+                  <th>Department</th>
+                  <th>Gateway Code</th>
+                  <th>Attendance Status</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${checkedInCandidates.length === 0 ? `
+                  <tr><td colspan="6" style="text-align: center; color: var(--ad-text-muted); padding: 2rem;">No candidates currently checked-in at Gateway gate.</td></tr>
+                ` : checkedInCandidates.map(c => `
+                  <tr>
+                    <td><strong style="color: var(--ad-orange);">${c.id}</strong></td>
+                    <td>
+                      <div style="font-weight: 700;">${c.fullName}</div>
+                      <div style="font-size: 0.75rem; color: var(--ad-text-muted);">${c.email}</div>
+                    </td>
+                    <td>${c.department}</td>
+                    <td><code>${c.ticketCode}</code></td>
+                    <td>
+                      <span class="ad-badge ad-badge-success">Gate Checked-In</span>
+                    </td>
+                    <td style="text-align: right;">
+                      ${c.certificateReleased ? `
+                        <span style="font-size: 0.8rem; font-weight: 600; color: #10b981;"><i data-lucide="check-circle" style="display: inline-block; width: 14px; height: 14px; margin-right: 0.25rem;"></i> Released</span>
+                      ` : `
+                        <button class="btn btn-glow btn-sm" onclick="window.appEngine.releaseCertificate('${c.id}')">Release Cert</button>
+                      `}
+                    </td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Hiring Partnerships & Placement Stats -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>Hiring Partnerships</h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <span style="font-size: 1.25rem;">🌐</span>
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.85rem;">Google Cloud Platform</div>
+                    <div style="font-size: 0.7rem; color: var(--ad-text-muted);">Corporate Sponsor</div>
+                  </div>
+                </div>
+                <span class="ad-badge ad-badge-success" style="font-size: 0.6rem;">Active</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <span style="font-size: 1.25rem;">💻</span>
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.85rem;">Microsoft Academy</div>
+                    <div style="font-size: 0.7rem; color: var(--ad-text-muted);">Curriculum Collaborator</div>
+                  </div>
+                </div>
+                <span class="ad-badge ad-badge-success" style="font-size: 0.6rem;">Active</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <span style="font-size: 1.25rem;">🏥</span>
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.85rem;">NeuroTech Labs</div>
+                    <div style="font-size: 0.7rem; color: var(--ad-text-muted);">Incubator Partner</div>
+                  </div>
+                </div>
+                <span class="ad-badge ad-badge-success" style="font-size: 0.6rem;">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>Placement Dashboard</h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <div style="font-size: 0.8rem; display: flex; justify-content: space-between;">
+                <span>Total Placements:</span>
+                <strong style="color: var(--ad-orange);">24 candidates</strong>
+              </div>
+              <div style="font-size: 0.8rem; display: flex; justify-content: space-between;">
+                <span>Resume Pool:</span>
+                <strong style="color: var(--ad-blue);">18 submitted</strong>
+              </div>
+              <div style="font-size: 0.8rem; display: flex; justify-content: space-between;">
+                <span>Placement rate:</span>
+                <strong style="color: #10b981;">75%</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    lucide.createIcons();
+  }
+
+  releaseCertificate(id) {
+    const list = this.state.applicants;
+    const idx = list.findIndex(a => a.id === id);
+    if (idx !== -1) {
+      list[idx].certificateReleased = true;
+      this.updateState("applicants", list);
+      this.showToast(`Certificate released and sent to ${list[idx].fullName}!`, "success");
+      this.logAdminAction(`Certificate released for ${id}.`);
+      this.renderAdminCertificates();
+    }
+  }
+
+  renderAdminSettings() {
+    const root = document.getElementById("admin-view-root");
+    if (!root) return;
+
+    const rbacEnabled = this.loadData("settings_rbac", false);
+    const mfaEnabled = this.loadData("settings_2fa", false);
+    const autoBackupEnabled = this.loadData("settings_auto_backup", true);
+
+    const logs = this.loadData("admin_logs", [
+      { time: new Date(Date.now() - 3600000 * 2).toISOString(), action: "Admin Session authorized." },
+      { time: new Date(Date.now() - 3600000).toISOString(), action: "Default database seeded successfully." }
+    ]);
+
+    root.innerHTML = `
+      <div class="admin-grid-main-side">
+        <!-- Settings Form Panel -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>System Security & Security Policies</h3>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+              <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
+                <div>
+                  <div style="font-weight: 700; font-size: 0.9rem;">Enforce Role-Based Access Control (RBAC)</div>
+                  <div style="font-size: 0.75rem; color: var(--ad-text-muted);">Restricts trainers from modifying billing and pricing records.</div>
+                </div>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="settings-rbac-toggle" ${rbacEnabled ? 'checked' : ''} onchange="window.appEngine.toggleSetting('settings_rbac', this.checked)">
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
+                <div>
+                  <div style="font-weight: 700; font-size: 0.9rem;">Require Two-Factor Authentication (2FA)</div>
+                  <div style="font-size: 0.75rem; color: var(--ad-text-muted);">Demands TOTP validation during administrative unlock sessions.</div>
+                </div>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="settings-2fa-toggle" ${mfaEnabled ? 'checked' : ''} onchange="window.appEngine.toggleSetting('settings_2fa', this.checked)">
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <div style="font-weight: 700; font-size: 0.9rem;">Automated Database Backups</div>
+                  <div style="font-size: 0.75rem; color: var(--ad-text-muted);">Saves encrypted snapshots to localStorage on every state transition.</div>
+                </div>
+                <div class="checkbox-group">
+                  <input type="checkbox" id="settings-backup-toggle" ${autoBackupEnabled ? 'checked' : ''} onchange="window.appEngine.toggleSetting('settings_auto_backup', this.checked)">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3>Maintenance & Database Administration</h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <p style="font-size: 0.8rem; color: var(--ad-text-muted); line-height: 1.5; margin: 0;">Export the entire local database state as a JSON file or perform a database reset back to initial seeds.</p>
+              <div style="display: flex; gap: 0.75rem;">
+                <button class="btn btn-glow btn-sm" onclick="window.appEngine.backupDatabase()"><i data-lucide="download"></i> Download Backup JSON</button>
+                <button class="btn btn-danger btn-sm" onclick="window.appEngine.resetDatabase()"><i data-lucide="refresh-cw"></i> Reset Database</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audit Logger Column -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3>Administrative Audit Logs</h3>
+            <button class="btn btn-outline btn-sm" onclick="window.appEngine.clearAuditLogs()" style="border-color: rgba(255,255,255,0.1);"><i data-lucide="trash-2"></i> Clear</button>
+          </div>
+          <div class="activity-feed" id="settings-audit-feed" style="max-height: 400px; overflow-y: auto; padding-right: 0.5rem;">
+            ${logs.map(l => `
+              <div class="activity-item">
+                <div class="activity-dot blue"></div>
+                <div class="activity-content">
+                  <div style="font-weight: 600;">${l.action}</div>
+                  <span class="activity-time">${new Date(l.time).toLocaleTimeString()} - ${new Date(l.time).toLocaleDateString()}</span>
+                </div>
+              </div>
+            `).reverse().join("")}
+          </div>
+        </div>
+      </div>
+    `;
+
+    lucide.createIcons();
+  }
+
+  toggleSetting(key, val) {
+    localStorage.setItem(key, val);
+    this.showToast(`System preference updated.`, "success");
+    this.logAdminAction(`Setting ${key} toggled to ${val}.`);
+  }
+
+  backupDatabase() {
+    const backupData = {
+      applicants: this.state.applicants,
+      courses: this.state.courses,
+      subjects: this.state.subjects,
+      trainers: this.state.trainers,
+      sales: this.state.sales,
+      blogs: this.state.blogs,
+      media: this.state.media,
+      events: this.state.events
+    };
+
+    const str = JSON.stringify(backupData, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(str);
+    const link = document.createElement("a");
+    link.setAttribute("href", dataUri);
+    link.setAttribute("download", `futurestack_bootcamp_db_${Date.now()}.json`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    this.showToast("Database backup file downloaded.", "success");
+    this.logAdminAction("Database manually backed up.");
+  }
+
+  resetDatabase() {
+    if (confirm("WARNING: This will clear all changes and restore original demo database seeds. Are you sure you want to proceed?")) {
+      localStorage.clear();
+      this.showToast("Database reset successfully! Reloading session...", "warning");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    }
+  }
+
+  clearAuditLogs() {
+    if (confirm("Clear all administrative audit logs?")) {
+      const logs = [{ time: new Date().toISOString(), action: "Audit log history cleared." }];
+      localStorage.setItem("admin_logs", JSON.stringify(logs));
+      this.showToast("Audit logs cleared.", "info");
+      this.renderAdminSettings();
+    }
   }
 
   renderAdminLogin() {
